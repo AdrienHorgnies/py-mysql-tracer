@@ -1,8 +1,6 @@
 language: python
 python:
   - 3.6
-before_install:
-  - python setup.py install
 script: pytest
 deploy:
   provider: pypi
