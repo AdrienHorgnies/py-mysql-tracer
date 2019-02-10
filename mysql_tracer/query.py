@@ -37,8 +37,7 @@ def normalize_space(line):
 
 
 def strip_inline_comment(line):
-    return re.sub('--.*', '',
-                  re.sub('#.*', '', line))
+    return re.sub('(--|#).*', '', line)
 
 
 def is_blank(line):
