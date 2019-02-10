@@ -2,6 +2,8 @@ language: python
 python:
   - 3.6
 script: pytest
+before_install:
+  - python setup.py install
 deploy:
   provider: pypi
   distributions: "sdist bdist_wheel"
