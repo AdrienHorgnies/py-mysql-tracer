@@ -1,11 +1,12 @@
+from datetime import datetime, timedelta
+
 import mock
 
-import query
-from datetime import datetime, timedelta
+from mysql_tracer import Query
 
 
 def test_query_str():
-    tested_query = query.Query('tests/assets/sample-query.sql')
+    tested_query = Query('tests/assets/sample-query.sql')
 
     assert tested_query.query_str == "SELECT name, title FROM person LEFT JOIN job " \
                                      "ON person.job_id = job.id WHERE title NOT IN ('developer');"
@@ -25,7 +26,7 @@ def test_result(mock_datetime, mock_cp):
     ]
     mock_cursor.description = (('name',), ('title',))
 
-    actual = query.Query('tests/assets/sample-query.sql').result
+    actual = Query('tests/assets/sample-query.sql').result
 
     assert actual.execution_start == datetime(1992, 3, 4, 11, 0, 5, 654321)
     assert actual.execution_end == datetime(1992, 3, 4, 11, 0, 5, 987654)
