@@ -1,1 +1,1 @@
-from query import Query
+from mysql_tracer.query import Query
