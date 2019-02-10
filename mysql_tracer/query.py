@@ -1,7 +1,7 @@
 import re
 from datetime import datetime
 
-from cursor_provider import CursorProvider
+from mysql_tracer.cursor_provider import CursorProvider
 
 
 class Query:
