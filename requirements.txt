@@ -1,0 +1,6 @@
+pyyaml
+mysql-connector-python
+mock
+pytest
+coverage
+alone
