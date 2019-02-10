@@ -1,0 +1,14 @@
+language: python
+python:
+  - 3.6
+before_install:
+  - python setup.py install
+script: pytest
+deploy:
+  provider: pypi
+  distributions: "sdist bdist_wheel"
+  user: ahorgnies
+  password:
+    secure: IEObEOxUbbXZ0aanEDUXuo370Mr1T2yjRKikF9A8PQZG0xu8/LSifw28eDy923dpKehdHRY+in0jYFX8W+juD88AJD0DiD8YXZTWzFD1iWc6GaUu8ZFBppo++38QOf1efYib66CPEJo/QDkxdtS7fjSRUTQf4yugSFjy+FF+kJp+RMC3qsNh7IR+GyVs509Zj2vGllO6sc4y9qqqBDQTpGZx5xSVBxl0wzL+NZFCGXlybuuopXE9pHANhUB2PUfFNTikVR7NnxNpffe31c7VaIVVwdjgeRf4dSfXFF80W999SeIwZI9eSdqYb26tKQOz9/V5+NYrfuBEu77d3K3Kof4yoFE/chtM+mN5ALYKQNrLmIBcaNTBQ1MP13J/UKhocXjZue3rZ0O76GA7KEA2Z7wRXFjv3NZ/APvZ58uQjz1CVjhxFpXU375KJohA28PJEcH4YC2BHVIvhtssNyGM9LmpaRwYZSt/+4VF/Tk+C+6ws8q3NPL6R4LKFfCJV6movDNBiPTPCObGEZtoxDiTVQuVKiy3SECJDOsfz6YDQMN5peUPe3M/kIdwxr4GuacXaMFwmO5pt2qZZg42oLMcDPelV0WyMCV+tgrGozzIrCrLOv5sOksyTifjfYz4y1XcIUHBxhvzWSr0WrbECYCcxO23p4a4rJ+L9+HY6Z3nt8c=
+  on:
+    tags: true
