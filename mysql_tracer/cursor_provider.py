@@ -1,30 +1,30 @@
 from getpass import getpass
 
+import keyring
 from alone import MetaSingleton
 from mysql import connector
-import keyring
 
-from mysql_tracer.chest import host, user, database
+import chest
 
 
 class CursorProvider(metaclass=MetaSingleton):
 
     def __init__(self):
-        service = 'CursorProvider-{host}'.format(host=host, db=database)
-        keyring_password = keyring.get_password(service, user)
+        service = 'CursorProvider-{host}'.format(host=chest.host, db=chest.database)
+        keyring_password = keyring.get_password(service, chest.user)
         if keyring_password is None:
-            password = getpass("Password for {user}@{host}: ".format(user=user, host=host, db=database))
+            password = getpass("Password for {user}@{host}: ".format(user=chest.user, host=chest.host))
         else:
             password = keyring_password
 
         self.connection = connector.connect(
-            host=host,
-            user=user,
-            db=database,
+            host=chest.host,
+            user=chest.user,
+            db=chest.database,
             passwd=password)
 
         if password is not keyring_password:
-            keyring.set_password(service, user, password)
+            keyring.set_password(service, chest.user, password)
 
     def __del__(self):
         if hasattr(self, 'connection') and self.connection.is_connected():
@@ -33,10 +33,3 @@ class CursorProvider(metaclass=MetaSingleton):
     @staticmethod
     def cursor():
         return CursorProvider().connection.cursor()
-
-    @staticmethod
-    def add_arguments_to(parser):
-        parser.add_argument("--host", required=True, help="MySQL Server host. Can be configured with mysql.host.",
-                            conf_key="mysql.host")
-        parser.add_argument("--user", required=True, help="MySQL Server user. Can be configured with mysql.user.",
-                            conf_key="mysql.user")

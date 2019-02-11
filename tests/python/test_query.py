@@ -2,18 +2,18 @@ from datetime import datetime, timedelta
 
 import mock
 
-import mysql_tracer
+import query
 
 
 def test_query_str():
-    tested_query = mysql_tracer.Query('tests/assets/sample-query.sql')
+    tested_query = query.Query('tests/assets/sample-query.sql')
 
     assert tested_query.query_str == "SELECT name, title FROM person LEFT JOIN job " \
                                      "ON person.job_id = job.id WHERE title NOT IN ('developer');"
 
 
-@mock.patch('mysql_tracer.query.CursorProvider')
-@mock.patch('mysql_tracer.query.datetime')
+@mock.patch('query.CursorProvider')
+@mock.patch('query.datetime')
 def test_result(mock_datetime, mock_cp):
     mock_datetime.now.side_effect = (datetime(1992, 3, 4, 11, 0, 5, 654321),
                                      datetime(1992, 3, 4, 11, 0, 5, 987654))
@@ -26,7 +26,7 @@ def test_result(mock_datetime, mock_cp):
     ]
     mock_cursor.description = (('name',), ('title',))
 
-    actual = mysql_tracer.Query('tests/assets/sample-query.sql').result
+    actual = query.Query('tests/assets/sample-query.sql').result
 
     assert actual.execution_start == datetime(1992, 3, 4, 11, 0, 5, 654321)
     assert actual.execution_end == datetime(1992, 3, 4, 11, 0, 5, 987654)
