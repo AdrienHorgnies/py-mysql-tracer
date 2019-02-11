@@ -1,15 +1,26 @@
 import re
 from datetime import datetime
+from string import Template
 
 from cursor_provider import CursorProvider
 
 
 class Query:
 
-    def __init__(self, source):
+    def __init__(self, source, template_vars=None):
         self.source = source
+        self.template_vars = template_vars if template_vars is not None else dict()
+        self.__interpolated = None
         self.__query_str = None
         self.__result = None
+
+    @property
+    def interpolated(self):
+        if self.__interpolated is not None:
+            return self.__interpolated
+        else:
+            self.__interpolated = Template(open(self.source).read()).safe_substitute(**self.template_vars)
+            return self.__interpolated
 
     @property
     def query_str(self):
@@ -18,7 +29,7 @@ class Query:
         else:
             self.__query_str = ' '.join([
                 normalize_space(strip_inline_comment(line).strip())
-                for line in open(self.source)
+                for line in self.interpolated.split('\n')
                 if not is_comment(line) and not is_blank(line)
             ])
             return self.__query_str

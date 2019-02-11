@@ -12,6 +12,14 @@ def test_query_str():
                                      "ON person.job_id = job.id WHERE title NOT IN ('developer');"
 
 
+def test_template_query_str():
+    tested_query = query.Query('tests/assets/sample-template-query.sql',
+                               template_vars=dict(job='developer', disappear='', donotexist=''))
+
+    assert tested_query.query_str == "SELECT '{', '$jobs}', name, title FROM person LEFT JOIN job " \
+                                     "ON person.job_id = job.id WHERE title IN ('developer');"
+
+
 @mock.patch('query.CursorProvider')
 @mock.patch('query.datetime')
 def test_result(mock_datetime, mock_cp):
