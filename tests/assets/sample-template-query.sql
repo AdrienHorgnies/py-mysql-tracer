@@ -11,4 +11,7 @@ LEFT JOIN job
     -- an indented comment followed by a badly indented equality sign
     ON person.job_id =   job.id # another ugly inline comment
 
-WHERE title $disappear IN ('${job}');
+WHERE
+    title $disappear IN ('${job}')
+    AND this line will disappear because it has an ${unknown} template placeholder
+;

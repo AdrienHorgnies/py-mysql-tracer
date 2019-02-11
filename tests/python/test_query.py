@@ -17,7 +17,7 @@ def test_template_query_str():
                                template_vars=dict(job='developer', disappear='', donotexist=''))
 
     assert tested_query.query_str == "SELECT '{', '$jobs}', name, title FROM person LEFT JOIN job " \
-                                     "ON person.job_id = job.id WHERE title IN ('developer');"
+                                     "ON person.job_id = job.id WHERE title IN ('developer') ;"
 
 
 @mock.patch('query.CursorProvider')

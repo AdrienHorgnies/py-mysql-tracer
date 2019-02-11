@@ -19,7 +19,10 @@ class Query:
         if self.__interpolated is not None:
             return self.__interpolated
         else:
-            self.__interpolated = Template(open(self.source).read()).safe_substitute(**self.template_vars)
+            template = Template(open(self.source).read())
+            interpolated = template.safe_substitute(**self.template_vars)
+            unprovided_filtered = re.sub('\n.*\\${\\w+}.*\n', '\n', interpolated)
+            self.__interpolated = unprovided_filtered
             return self.__interpolated
 
     @property
