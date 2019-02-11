@@ -1,7 +1,9 @@
 language: python
 python:
   - 3.6
-script: pytest
+script:
+  - export PYTHONPATH=mysql_tracer
+  - pytest
 before_install:
   - python setup.py install
 deploy:
