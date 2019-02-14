@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 
 import mock
+import os.path
 
 import query
 
@@ -41,3 +42,45 @@ def test_result(mock_datetime, mock_cp):
     assert actual.duration == timedelta(microseconds=333333)
     assert actual.rows == mock_cursor.fetchall.return_value
     assert actual.description == ('name', 'title')
+
+
+@mock.patch('query.CursorProvider')
+@mock.patch('query.datetime')
+def test_report(mock_datetime, mock_cp, query_path, executed_query_path):
+    mock_datetime.now.side_effect = (datetime(1992, 3, 4, 11, 0, 5, 654321),
+                                     datetime(1992, 3, 4, 11, 0, 5, 987654))
+
+    mock_cursor = mock.Mock()
+    mock_cp.cursor.return_value = mock_cursor
+    mock_cursor.fetchall.return_value = [
+        ('Adrien Horgnies', 'analyst developer'),
+        ('Constance de Lannoy', 'secretary')
+    ]
+    mock_cursor.description = (('name',), ('title',))
+
+    tested_query = query.Query(query_path)
+
+    assert os.path.basename(tested_query.report) == '1992-03-04T11-00-05_query.sql'
+    assert os.path.isfile(tested_query.report)
+    assert [line for line in open(tested_query.report)] == [line for line in open(executed_query_path)]
+
+
+@mock.patch('query.CursorProvider')
+@mock.patch('query.datetime')
+def test_export(mock_datetime, mock_cp, query_path, executed_export_path):
+    mock_datetime.now.side_effect = (datetime(1992, 3, 4, 11, 0, 5, 654321),
+                                     datetime(1992, 3, 4, 11, 0, 5, 987654))
+
+    mock_cursor = mock.Mock()
+    mock_cp.cursor.return_value = mock_cursor
+    mock_cursor.fetchall.return_value = [
+        ('Adrien Horgnies', 'analyst developer'),
+        ('Constance de Lannoy', 'secretary')
+    ]
+    mock_cursor.description = (('name',), ('title',))
+
+    tested_query = query.Query(query_path)
+
+    assert os.path.basename(tested_query.export) == '1992-03-04T11-00-05_query.csv'
+    assert os.path.isfile(tested_query.export)
+    assert [line for line in open(tested_query.export)] == [line for line in open(executed_export_path)]
