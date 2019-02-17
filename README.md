@@ -32,7 +32,7 @@ optional arguments:
 ```
 
 It exposes the class `Query`. The constructor needs a path to a file containing a single sql statement and instances 
-exposes the method `export` which creates a timestamped copy of the original file, appended with an execution report and
+expose the method `export` which creates a timestamped copy of the original file, appended with an execution report and
 an export of the result in the csv format. 
 
 ## Development
