@@ -34,3 +34,15 @@ optional arguments:
 It exposes the class `Query`. The constructor needs a path to a file containing a single sql statement and instances 
 exposes the method `export` which creates a timestamped copy of the original file, appended with an execution report and
 an export of the result in the csv format. 
+
+## Development
+
+You can install dependencies with `pip install -r requirements.txt`.
+
+You can run tests with `pytest` but you need to set `PYTHONPATH`.
+```
+$ export PYTHONPATH=mysql_tracer
+$ python3 -m pytest
+```
+
+Or you can setup a test run with your IDE without any particular configuration.
