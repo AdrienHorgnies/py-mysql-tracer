@@ -46,8 +46,8 @@ class Query:
             self.__result = Result(self.query_str)
             return self.__result
 
-    def export(self):
-        return writer.write(self)
+    def export(self, destination=None):
+        return writer.write(self, destination)
 
 
 def normalize_space(line):
