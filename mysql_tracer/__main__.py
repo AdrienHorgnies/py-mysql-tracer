@@ -5,7 +5,7 @@ from query import Query
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('query', nargs='+', help='Path to a file containing a single sql statement.')
+    parser.add_argument('query', nargs='+', help='Path to a file containing a single sql statement')
     parser.add_argument('--host', required=True, help='MySQL server host')
     parser.add_argument('--user', required=True, help='MySQL server user')
     parser.add_argument('--database', help='MySQL database name')
