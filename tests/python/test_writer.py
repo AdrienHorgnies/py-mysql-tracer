@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from os.path import isfile, basename
+from os.path import isfile, basename, join
 
 import mock
 import pytest
@@ -32,4 +32,15 @@ def test_write(query, executed_query_path, executed_export_path):
     
     assert basename(export) == '1992-03-04T11-00-05_query.csv'
     assert isfile(export)
+    assert [line for line in open(export)] == [line for line in open(executed_export_path)]
+
+
+def test_write_with_destination(query, tmpdir, executed_query_path, executed_export_path):
+    report, export = writer.write(query, tmpdir)
+
+    assert report == join(tmpdir, '1992-03-04T11-00-05_query.sql')
+    assert export == join(tmpdir, '1992-03-04T11-00-05_query.csv')
+    assert isfile(report)
+    assert isfile(export)
+    assert [line for line in open(report)] == [line for line in open(executed_query_path)]
     assert [line for line in open(export)] == [line for line in open(executed_export_path)]

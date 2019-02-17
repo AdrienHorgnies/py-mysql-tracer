@@ -12,9 +12,11 @@ REPORT_TEMPLATE = '''
 '''
 
 
-def write(query):
+def write(query, destination=None):
     prefix = query.result.execution_start.strftime("%Y-%m-%dT%H-%M-%S_")
-    report_path = join(dirname(query.source), prefix + basename(query.source))
+
+    directory = destination if destination is not None else dirname(query.source)
+    report_path = join(directory, prefix + basename(query.source))
     export_path = splitext(report_path)[0] + '.csv'
 
     copyfile(query.source, report_path)
