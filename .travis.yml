@@ -1,16 +1,16 @@
 language: python
 python:
-  - 3.6
+- 3.6
 script:
-  - export PYTHONPATH=mysql_tracer
-  - pytest
+- export PYTHONPATH=mysql_tracer
+- pytest
 before_install:
-  - python setup.py install
+- python setup.py install
 deploy:
   provider: pypi
-  distributions: "sdist bdist_wheel"
+  distributions: sdist bdist_wheel
   user: ahorgnies
   password:
-    secure: IEObEOxUbbXZ0aanEDUXuo370Mr1T2yjRKikF9A8PQZG0xu8/LSifw28eDy923dpKehdHRY+in0jYFX8W+juD88AJD0DiD8YXZTWzFD1iWc6GaUu8ZFBppo++38QOf1efYib66CPEJo/QDkxdtS7fjSRUTQf4yugSFjy+FF+kJp+RMC3qsNh7IR+GyVs509Zj2vGllO6sc4y9qqqBDQTpGZx5xSVBxl0wzL+NZFCGXlybuuopXE9pHANhUB2PUfFNTikVR7NnxNpffe31c7VaIVVwdjgeRf4dSfXFF80W999SeIwZI9eSdqYb26tKQOz9/V5+NYrfuBEu77d3K3Kof4yoFE/chtM+mN5ALYKQNrLmIBcaNTBQ1MP13J/UKhocXjZue3rZ0O76GA7KEA2Z7wRXFjv3NZ/APvZ58uQjz1CVjhxFpXU375KJohA28PJEcH4YC2BHVIvhtssNyGM9LmpaRwYZSt/+4VF/Tk+C+6ws8q3NPL6R4LKFfCJV6movDNBiPTPCObGEZtoxDiTVQuVKiy3SECJDOsfz6YDQMN5peUPe3M/kIdwxr4GuacXaMFwmO5pt2qZZg42oLMcDPelV0WyMCV+tgrGozzIrCrLOv5sOksyTifjfYz4y1XcIUHBxhvzWSr0WrbECYCcxO23p4a4rJ+L9+HY6Z3nt8c=
+    secure: M8Ea3ARgUwuK4fOisK0TLU7AdTvJYaBvz1V1MV5h4hhfYAWKNdMzmtg42vgi8Qc0gb16VFEiUOjeSGjUWpOH24EHKxzl327A62o47n2mCgavrJzd62lHeT8kTA0Zv64Himu8Be5KlOk+DHcEloh0YK4d+U20XImiX/TJvpANjBYCbjQGOaRMgR4WRqsirms2Cw9283N/ByLlafeQEJv4xcHQ1fVFVWmha27Zvy0dgWIRdQGT2Dq6tzfn01rLlwHZcNV1gmjPt73uOA5H00w3ZYIqplH0A4stsK7FHRcTqriUHBoY7EpqnZQ5p6VCQ1XUqtL8ImXJu/zz9divK379csl2XlzNYSbv13pQdhhEmAVQAnLJ9uX7kWZYuu3/iSZzybxABAKY6VHaqKxt1rQliBH3n1xUsIBMzFoqKSrJYE9x0P/u7foV744GG3ZZUPwVX2wHjNACbCZpeOsPwaTYbo8/1u1gk5PB/7JJrVmmN9dYG/m//R9zrNV+iYZQDlighUztfeMXB6+bEBo/r826IRojqY7gN72fmUoqg98cvyf/oQysVfkeIWQpPcxh3LpJzNPNdI1rLaII0BL/wASBpRcdc2E1FMdlOKwCtAPAn1ARCQyKYe4DQMZON9t0NBbcbBY2TdY4AnOr6LG3qw6TZP2BkmHP6bKToLcIWvr2FHU=
   on:
     tags: true
