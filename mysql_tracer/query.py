@@ -2,8 +2,8 @@ import re
 from datetime import datetime
 from string import Template
 
-import writer
-from cursor_provider import CursorProvider
+from . import writer
+from .cursor_provider import CursorProvider
 
 
 class Query:

@@ -1,9 +1,10 @@
 import argparse
 
-import chest
-from query import Query
+from . import chest
+from .query import Query
 
-if __name__ == '__main__':
+
+def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('query', nargs='+', help='Path to a file containing a single sql statement')
     parser.add_argument('--host', required=True, help='MySQL server host')
@@ -18,13 +19,11 @@ if __name__ == '__main__':
     group.add_argument('--display', default=False, action='store_true',
                        help='Do not export results but display them to stdout')
     args = parser.parse_args()
-
     chest.host = args.host
     chest.user = args.user
     chest.database = args.database
     chest.ask_password = args.ask_password
     chest.store_password = args.store_password
-
     queries = [Query(path) for path in args.query]
     for query in queries:
         if not args.display:
@@ -33,3 +32,7 @@ if __name__ == '__main__':
             print(query.source)
             print(query.result.description)
             print(query.result.rows)
+
+
+if __name__ == '__main__':
+    main()
