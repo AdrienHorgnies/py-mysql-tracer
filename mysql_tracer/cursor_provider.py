@@ -4,7 +4,7 @@ import keyring
 from alone import MetaSingleton
 from mysql import connector
 
-from . import chest
+from mysql_tracer import chest
 
 
 class CursorProvider(metaclass=MetaSingleton):

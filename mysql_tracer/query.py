@@ -2,8 +2,8 @@ import re
 from datetime import datetime
 from string import Template
 
-from . import writer
-from .cursor_provider import CursorProvider
+from mysql_tracer import writer
+from mysql_tracer.cursor_provider import CursorProvider
 
 
 class Query:

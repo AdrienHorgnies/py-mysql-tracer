@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 
 import mock
 
-import query
+from mysql_tracer import query
 
 
 def test_query_str():
@@ -20,8 +20,8 @@ def test_template_query_str():
                                      "ON person.job_id = job.id WHERE title IN ('developer') ;"
 
 
-@mock.patch('query.CursorProvider')
-@mock.patch('query.datetime')
+@mock.patch('mysql_tracer.query.CursorProvider')
+@mock.patch('mysql_tracer.query.datetime')
 def test_result(mock_datetime, mock_cp, query_path):
     mock_datetime.now.side_effect = (datetime(1992, 3, 4, 11, 0, 5, 654321),
                                      datetime(1992, 3, 4, 11, 0, 5, 987654))

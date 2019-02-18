@@ -4,7 +4,7 @@ from os.path import isfile, basename, join
 import mock
 import pytest
 
-import writer
+from mysql_tracer import writer
 
 
 @pytest.fixture
