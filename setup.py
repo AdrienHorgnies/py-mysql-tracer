@@ -15,6 +15,9 @@ setuptools.setup(
     download_url='https://github.com/AdrienHorgnies/py-mysql-tracer/archive/{version}.tar.gz'.format(version=version),
     packages=setuptools.find_packages(),
     install_requires=['mysql-connector-python', 'pyyaml', 'alone', 'keyring'],
+    entry_points={
+        'console_scripts': ['mysql_tracer=mysql_tracer.__main__:main']
+    },
     license='MIT License',
     classifiers=[
         'Programming Language :: Python :: 3',
