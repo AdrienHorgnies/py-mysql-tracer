@@ -1,2 +1,2 @@
 # noinspection PyUnresolvedReferences
-from mysql_tracer.query import Query
+from mysql_tracer._query import Query

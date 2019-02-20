@@ -4,7 +4,8 @@ from os.path import isfile, basename, join
 import mock
 import pytest
 
-from mysql_tracer import writer
+# noinspection PyProtectedMember
+from mysql_tracer import _writer
 
 
 @pytest.fixture
@@ -24,7 +25,7 @@ def query(query_path):
 
 
 def test_write(query, executed_query_path, executed_export_path):
-    report, export = writer.write(query)
+    report, export = _writer.write(query)
 
     assert basename(report) == '1992-03-04T11-00-05_query.sql'
     assert isfile(report)
@@ -36,7 +37,7 @@ def test_write(query, executed_query_path, executed_export_path):
 
 
 def test_write_with_destination(query, tmpdir, executed_query_path, executed_export_path):
-    report, export = writer.write(query, tmpdir)
+    report, export = _writer.write(query, tmpdir)
 
     assert report == join(tmpdir, '1992-03-04T11-00-05_query.sql')
     assert export == join(tmpdir, '1992-03-04T11-00-05_query.csv')

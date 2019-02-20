@@ -1,7 +1,7 @@
 import argparse
 
 from mysql_tracer import chest
-from mysql_tracer.query import Query
+from mysql_tracer._query import Query
 
 
 def main():

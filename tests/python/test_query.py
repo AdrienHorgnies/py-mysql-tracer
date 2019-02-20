@@ -2,26 +2,27 @@ from datetime import datetime, timedelta
 
 import mock
 
-from mysql_tracer import query
+# noinspection PyProtectedMember
+from mysql_tracer import _query
 
 
 def test_query_str():
-    tested_query = query.Query('tests/assets/sample-query.sql')
+    actual = _query.Query('tests/assets/sample-query.sql')
 
-    assert tested_query.query_str == "SELECT name, title FROM person LEFT JOIN job " \
-                                     "ON person.job_id = job.id WHERE title NOT IN ('developer');"
+    assert actual.query_str == "SELECT name, title FROM person LEFT JOIN job " \
+                               "ON person.job_id = job.id WHERE title NOT IN ('developer');"
 
 
 def test_template_query_str():
-    tested_query = query.Query('tests/assets/sample-template-query.sql',
-                               template_vars=dict(job='developer', disappear='', donotexist=''))
+    actual = _query.Query('tests/assets/sample-template-query.sql',
+                          template_vars=dict(job='developer', disappear='', donotexist=''))
 
-    assert tested_query.query_str == "SELECT '{', '$jobs}', name, title FROM person LEFT JOIN job " \
-                                     "ON person.job_id = job.id WHERE title IN ('developer') ;"
+    assert actual.query_str == "SELECT '{', '$jobs}', name, title FROM person LEFT JOIN job " \
+                               "ON person.job_id = job.id WHERE title IN ('developer') ;"
 
 
-@mock.patch('mysql_tracer.query.CursorProvider')
-@mock.patch('mysql_tracer.query.datetime')
+@mock.patch('mysql_tracer._query.CursorProvider')
+@mock.patch('mysql_tracer._query.datetime')
 def test_result(mock_datetime, mock_cp, query_path):
     mock_datetime.now.side_effect = (datetime(1992, 3, 4, 11, 0, 5, 654321),
                                      datetime(1992, 3, 4, 11, 0, 5, 987654))
@@ -34,7 +35,7 @@ def test_result(mock_datetime, mock_cp, query_path):
     ]
     mock_cursor.description = (('name',), ('title',))
 
-    actual = query.Query(query_path).result
+    actual = _query.Query(query_path).result
 
     assert actual.execution_start == datetime(1992, 3, 4, 11, 0, 5, 654321)
     assert actual.execution_end == datetime(1992, 3, 4, 11, 0, 5, 987654)
