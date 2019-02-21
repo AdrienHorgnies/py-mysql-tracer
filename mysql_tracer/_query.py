@@ -117,8 +117,21 @@ def is_comment(line):
 
 
 class Result:
+    """
+    Hold the results of the execution of a MySQL query
+
+    execution_start: datetime before query execution
+    execution_end: datetime after query execution
+    duration: timedelta of execution_end minus execution_start
+    rows: list<tuple<?>> the data the query fetched
+    description: tuple<str> the headers of the rows
+    """
 
     def __init__(self, query_str):
+        """
+        :param query_str: the query to execute
+        :type query_str: str
+        """
         cursor = CursorProvider.cursor()
         self.execution_start = datetime.now()
         cursor.execute(query_str)
