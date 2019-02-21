@@ -7,8 +7,28 @@ from mysql_tracer._cursor_provider import CursorProvider
 
 
 class Query:
+    """
+    Represents a MySQL query created from a file. The original file is never modified.
+
+    The reason of existence of this class is to create traces of executed queries so you don't loose track of what you
+    did.
+
+    Implements a templating system using the syntax ${key}. Line containing a template key will be stripped from
+    executed query if no substitute value is provided !
+
+    Can execute said query and hold the results through the class Result.
+
+    Properties are lazy evaluated and are evaluated only once. export and result trigger the execution of the query.
+    """
 
     def __init__(self, source, template_vars=None):
+        """
+        :param source: the path to a file containing a single MySQL statement.
+        :type source: str | os.PathLike
+        :param template_vars: template keys and values to substitute. A Key ${key} will be replaced by the corresponding
+         dictionary value.
+        :type template_vars: dict
+        """
         self.source = source
         self.template_vars = template_vars if template_vars is not None else dict()
         self.__interpolated = None
@@ -17,6 +37,13 @@ class Query:
 
     @property
     def interpolated(self):
+        """
+        String representation of the source file content after substituting template keys by their values and stripping
+        line containing template keys that were not provided.
+
+        :return: the content of the source file after template interpolation
+        :rtype: str
+        """
         if self.__interpolated is not None:
             return self.__interpolated
         else:
@@ -28,6 +55,12 @@ class Query:
 
     @property
     def query_str(self):
+        """
+        Single line string representation of the query after interpolation
+
+        :return: Single line string representation of the query after interpolation
+        :rtype: str
+        """
         if self.__query_str is not None:
             return self.__query_str
         else:
@@ -40,6 +73,13 @@ class Query:
 
     @property
     def result(self):
+        """
+        The result of the execution of the query, the value is processed at first access then retrieved every other
+        times.
+
+        :return: the result of the execution of the query
+        :rtype: Result
+        """
         if self.__result is not None:
             return self.__result
         else:
@@ -47,6 +87,16 @@ class Query:
             return self.__result
 
     def export(self, destination=None):
+        """
+        Exports the query after interpolation to a file with a time prefixed version of the original file name with a
+        mini report of the execution appended at the end of the file. And exports the result in a csv file with the same
+        name except for the extension.
+
+        :param destination: directory where to create the report and result files
+        :type destination: str | os.PathLike
+        :return: tuple(report, result)
+        :rtype: tuple<str>
+        """
         return writer.write(self, destination)
 
 
