@@ -8,13 +8,13 @@ Other statements will work but the features offered by this module will provide 
 
 This can be used as a command line tool:
 ```
-$ python3 mysql_tracer -h
+$ mysql_tracer -h
 usage: mysql_tracer [-h] --host HOST --user USER [--database DATABASE] [-a]
                     [-s] [-d DESTINATION | --display]
                     query [query ...]
 
 positional arguments:
-  query                 Path to a file containing a single sql statement.
+  query                 Path to a file containing a single sql statement
 
 optional arguments:
   -h, --help            show this help message and exit
