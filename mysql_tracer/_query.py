@@ -141,7 +141,7 @@ class Result:
         self.description = tuple(column[0] for column in cursor.description)
 
     def __repr__(self):
-        return 'RESULT(' \
+        return 'Result(' \
                'execution_start={execution_start}, ' \
                'execution_end={execution_end}, ' \
                'duration={duration}, ' \
