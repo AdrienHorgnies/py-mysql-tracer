@@ -45,3 +45,7 @@ def test_write_with_destination(query, tmpdir, executed_query_path, executed_exp
     assert isfile(export)
     assert [line for line in open(report)] == [line for line in open(executed_query_path)]
     assert [line for line in open(export)] == [line for line in open(executed_export_path)]
+
+
+def test_write_with_template():
+    assert False
