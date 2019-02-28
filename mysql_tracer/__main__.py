@@ -12,7 +12,7 @@ def main():
     parser.add_argument('--database', help='MySQL database name')
     parser.add_argument('-a', '--ask-password', default=False, action='store_true',
                         help='Do not try to retrieve password from keyring, always ask password')
-    parser.add_argument('-s', '--store_password', default=False, action='store_true',
+    parser.add_argument('-s', '--store-password', default=False, action='store_true',
                         help='Store password into keyring after connecting to the database')
     group = parser.add_mutually_exclusive_group()
     group.add_argument('-d', '--destination', help='Directory where to export results')
