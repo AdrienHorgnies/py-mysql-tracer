@@ -139,3 +139,11 @@ class Result:
         self.duration = self.execution_end - self.execution_start
         self.rows = cursor.fetchall()
         self.description = tuple(column[0] for column in cursor.description)
+
+    def __repr__(self):
+        return 'RESULT(' \
+               'execution_start={execution_start}, ' \
+               'execution_end={execution_end}, ' \
+               'duration={duration}, ' \
+               'rows={rows}, ' \
+               'description={description})'.format(**vars(self))

@@ -29,9 +29,8 @@ def main():
         if not args.display:
             query.export(destination=args.destination)
         else:
-            print(query.source)
-            print(query.result.description)
-            print(query.result.rows)
+            print(query)
+            print(query.result)
 
 
 if __name__ == '__main__':
