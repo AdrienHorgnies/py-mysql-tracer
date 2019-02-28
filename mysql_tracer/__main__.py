@@ -14,6 +14,8 @@ def main():
                         help='Do not try to retrieve password from keyring, always ask password')
     parser.add_argument('-s', '--store-password', default=False, action='store_true',
                         help='Store password into keyring after connecting to the database')
+    parser.add_argument('-t', '--template-var', nargs=2, metavar=('KEY', 'VALUE'), action='append',
+                        help='Define a key value pair to substitute the ${key} by the value within the query')
     group = parser.add_mutually_exclusive_group()
     group.add_argument('-d', '--destination', help='Directory where to export results')
     group.add_argument('--display', default=False, action='store_true',
@@ -24,12 +26,12 @@ def main():
     chest.database = args.database
     chest.ask_password = args.ask_password
     chest.store_password = args.store_password
-    queries = [Query(path) for path in args.query]
+    queries = [Query(path, dict(args.template_var) if args.template_var else None) for path in args.query]
     for query in queries:
-        if not args.display:
-            query.export(destination=args.destination)
-        else:
+        if args.display:
             print(query)
+        else:
+            query.export(destination=args.destination)
 
 
 if __name__ == '__main__':
