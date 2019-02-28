@@ -32,7 +32,7 @@ class Query:
         self.source = source
         self.template_vars = template_vars if template_vars is not None else dict()
         self.__interpolated = None
-        self.__query_str = None
+        self.__executable_str = None
         self.__result = None
 
     @property
@@ -54,22 +54,22 @@ class Query:
             return self.__interpolated
 
     @property
-    def query_str(self):
+    def executable_str(self):
         """
         Single line string representation of the query after interpolation
 
         :return: Single line string representation of the query after interpolation
         :rtype: str
         """
-        if self.__query_str is not None:
-            return self.__query_str
+        if self.__executable_str is not None:
+            return self.__executable_str
         else:
-            self.__query_str = ' '.join([
+            self.__executable_str = ' '.join([
                 normalize_space(strip_inline_comment(line).strip())
                 for line in self.interpolated.split('\n')
                 if not is_comment(line) and not is_blank(line)
             ])
-            return self.__query_str
+            return self.__executable_str
 
     @property
     def result(self):
@@ -83,7 +83,7 @@ class Query:
         if self.__result is not None:
             return self.__result
         else:
-            self.__result = Result(self.query_str)
+            self.__result = Result(self.executable_str)
             return self.__result
 
     def export(self, destination=None):

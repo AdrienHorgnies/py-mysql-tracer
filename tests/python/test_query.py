@@ -6,19 +6,19 @@ import mock
 from mysql_tracer import _query
 
 
-def test_query_str():
+def test_executable_str():
     actual = _query.Query('tests/assets/sample-query.sql')
 
-    assert actual.query_str == "SELECT name, title FROM person LEFT JOIN job " \
-                               "ON person.job_id = job.id WHERE title NOT IN ('developer');"
+    assert actual.executable_str == "SELECT name, title FROM person LEFT JOIN job " \
+                                    "ON person.job_id = job.id WHERE title NOT IN ('developer');"
 
 
-def test_template_query_str():
+def test_template_executable_str():
     actual = _query.Query('tests/assets/sample-template-query.sql',
                           template_vars=dict(job='developer', disappear='', donotexist=''))
 
-    assert actual.query_str == "SELECT '{', '$jobs}', name, title FROM person LEFT JOIN job " \
-                               "ON person.job_id = job.id WHERE title IN ('developer') ;"
+    assert actual.executable_str == "SELECT '{', '$jobs}', name, title FROM person LEFT JOIN job " \
+                                    "ON person.job_id = job.id WHERE title IN ('developer') ;"
 
 
 @mock.patch('mysql_tracer._query.CursorProvider')
