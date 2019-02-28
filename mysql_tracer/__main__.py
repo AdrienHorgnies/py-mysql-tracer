@@ -30,7 +30,6 @@ def main():
             query.export(destination=args.destination)
         else:
             print(query)
-            print(query.result)
 
 
 if __name__ == '__main__':

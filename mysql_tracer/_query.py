@@ -35,6 +35,15 @@ class Query:
         self.__executable_str = None
         self.__result = None
 
+    def __repr__(self):
+        return 'Query(' \
+               'source={source!r}, ' \
+               'template_vars={template_vars!r}, ' \
+               'interpolated={interpolated!r}, ' \
+               'executable_str={executable_str!r}, ' \
+               'result={result})'.format(**vars(self), interpolated=self.interpolated,
+                                         executable_str=self.executable_str, result=self.result)
+
     @property
     def interpolated(self):
         """
