@@ -29,11 +29,10 @@ def test_write(asset, query):
     report, export = _writer.write(query)
 
     assert basename(report) == '1992-03-04T11-00-05_sample-query-with-easy-template.sql'
-    assert isfile(report)
-    assert [line for line in open(report)] == [line for line in open(asset('sample-query-executed.sql'))]
-    
     assert basename(export) == '1992-03-04T11-00-05_sample-query-with-easy-template.csv'
+    assert isfile(report)
     assert isfile(export)
+    assert [line for line in open(report)] == [line for line in open(asset('sample-query-executed.sql'))]
     assert [line for line in open(export)] == [line for line in open(asset('sample-query-executed.csv'))]
 
 
