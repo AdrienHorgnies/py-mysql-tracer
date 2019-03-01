@@ -1,7 +1,5 @@
 import csv
 from os.path import join, dirname, basename, splitext
-from shutil import copyfile
-
 
 REPORT_TEMPLATE = '''
 -- START TIME: {start}
@@ -19,9 +17,8 @@ def write(query, destination=None):
     report_path = join(directory, prefix + basename(query.source))
     export_path = splitext(report_path)[0] + '.csv'
 
-    copyfile(query.source, report_path)
-
-    with open(report_path, 'a') as report_file:
+    with open(report_path, 'w') as report_file:
+        report_file.write(query.interpolated)
         report_file.write(REPORT_TEMPLATE.format(
             start=query.result.execution_start.isoformat(),
             end=query.result.execution_end.isoformat(),
