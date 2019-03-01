@@ -8,9 +8,8 @@ Other statements will work but the features offered by this module will provide 
 
 This can be used as a command line tool:
 ```
-$ mysql_tracer -h
 usage: mysql_tracer [-h] --host HOST --user USER [--database DATABASE] [-a]
-                    [-s] [-d DESTINATION | --display]
+                    [-s] [-t KEY VALUE] [-d DESTINATION | --display]
                     query [query ...]
 
 positional arguments:
@@ -23,8 +22,11 @@ optional arguments:
   --database DATABASE   MySQL database name
   -a, --ask-password    Do not try to retrieve password from keyring, always
                         ask password
-  -s, --store_password  Store password into keyring after connecting to the
+  -s, --store-password  Store password into keyring after connecting to the
                         database
+  -t KEY VALUE, --template-var KEY VALUE
+                        Define a key value pair to substitute the ${key} by
+                        the value within the query
   -d DESTINATION, --destination DESTINATION
                         Directory where to export results
   --display             Do not export results but display them to stdout
