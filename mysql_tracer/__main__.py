@@ -22,11 +22,13 @@ def main():
     group.add_argument('--display', default=False, action='store_true',
                        help='Do not export results but display them to stdout')
     args = parser.parse_args()
+
     chest.host = args.host
     chest.user = args.user
     chest.database = args.database
     chest.ask_password = args.ask_password
     chest.store_password = args.store_password
+
     queries = [Query(path, dict(args.template_vars) if args.template_vars else None) for path in args.query]
     for query in queries:
         if args.display:
