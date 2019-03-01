@@ -23,7 +23,7 @@ def test_template_executable_str():
 
 @mock.patch('mysql_tracer._query.CursorProvider')
 @mock.patch('mysql_tracer._query.datetime')
-def test_result(mock_datetime, mock_cp, query_path):
+def test_result(mock_datetime, mock_cp, asset):
     mock_datetime.now.side_effect = (datetime(1992, 3, 4, 11, 0, 5, 654321),
                                      datetime(1992, 3, 4, 11, 0, 5, 987654))
 
@@ -35,7 +35,7 @@ def test_result(mock_datetime, mock_cp, query_path):
     ]
     mock_cursor.description = (('name',), ('title',))
 
-    actual = _query.Query(query_path).result
+    actual = _query.Query(asset('sample-query.sql')).result
 
     assert actual.execution_start == datetime(1992, 3, 4, 11, 0, 5, 654321)
     assert actual.execution_end == datetime(1992, 3, 4, 11, 0, 5, 987654)

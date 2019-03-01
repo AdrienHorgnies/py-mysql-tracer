@@ -6,14 +6,6 @@ import pytest
 RSRC = join(dirname(realpath(__file__)), 'tests', 'assets')
 
 
-@pytest.fixture(scope='function')
-def query_path(tmpdir_factory):
-    tmp_query = tmpdir_factory.mktemp('test_ground').join('query.sql')
-    copy(join(RSRC, 'sample-query.sql'), tmp_query)
-    assert open(join(RSRC, 'sample-query.sql')).read() == open(tmp_query).read()
-    return tmp_query
-
-
 @pytest.fixture(scope='session')
 def asset_copy(tmpdir_factory):
     def __copy(*args):
