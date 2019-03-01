@@ -9,9 +9,10 @@ from mysql_tracer import _writer
 
 
 @pytest.fixture
-def query(query_path):
+def query(asset, asset_copy):
     query_mock = mock.MagicMock()
-    query_mock.source = query_path
+    query_mock.source = asset_copy('sample-query-with-easy-template.sql')
+    query_mock.interpolated = open(asset('sample-query.sql')).read()
     query_mock.result = mock.MagicMock()
     query_mock.result.execution_start = datetime(1992, 3, 4, 11, 0, 5, 654321)
     query_mock.result.execution_end = datetime(1992, 3, 4, 11, 0, 5, 987654)
@@ -45,7 +46,3 @@ def test_write_with_destination(query, tmpdir, executed_query_path, executed_exp
     assert isfile(export)
     assert [line for line in open(report)] == [line for line in open(executed_query_path)]
     assert [line for line in open(export)] == [line for line in open(executed_export_path)]
-
-
-def test_write_with_template():
-    assert False
