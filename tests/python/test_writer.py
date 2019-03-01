@@ -25,24 +25,24 @@ def query(asset, asset_copy):
     return query_mock
 
 
-def test_write(query, executed_query_path, executed_export_path):
+def test_write(asset, query):
     report, export = _writer.write(query)
 
     assert basename(report) == '1992-03-04T11-00-05_sample-query-with-easy-template.sql'
     assert isfile(report)
-    assert [line for line in open(report)] == [line for line in open(executed_query_path)]
+    assert [line for line in open(report)] == [line for line in open(asset('sample-query-executed.sql'))]
     
     assert basename(export) == '1992-03-04T11-00-05_sample-query-with-easy-template.csv'
     assert isfile(export)
-    assert [line for line in open(export)] == [line for line in open(executed_export_path)]
+    assert [line for line in open(export)] == [line for line in open(asset('sample-query-executed.csv'))]
 
 
-def test_write_with_destination(query, tmpdir, executed_query_path, executed_export_path):
+def test_write_with_destination(asset, query, tmpdir):
     report, export = _writer.write(query, tmpdir)
 
     assert report == join(tmpdir, '1992-03-04T11-00-05_sample-query-with-easy-template.sql')
     assert export == join(tmpdir, '1992-03-04T11-00-05_sample-query-with-easy-template.csv')
     assert isfile(report)
     assert isfile(export)
-    assert [line for line in open(report)] == [line for line in open(executed_query_path)]
-    assert [line for line in open(export)] == [line for line in open(executed_export_path)]
+    assert [line for line in open(report)] == [line for line in open(asset('sample-query-executed.sql'))]
+    assert [line for line in open(export)] == [line for line in open(asset('sample-query-executed.csv'))]

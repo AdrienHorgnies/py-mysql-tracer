@@ -30,13 +30,3 @@ def asset():
         return join(RSRC, *args)
 
     return __get
-
-
-@pytest.fixture(scope='session')
-def executed_query_path():
-    return join(RSRC, 'sample-query-executed.sql')
-
-
-@pytest.fixture(scope='session')
-def executed_export_path():
-    return join(RSRC, 'sample-query-executed.csv')
