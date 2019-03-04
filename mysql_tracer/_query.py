@@ -1,5 +1,6 @@
 import re
 from datetime import datetime
+from os.path import splitext, basename
 from string import Template
 
 from mysql_tracer import _writer as writer
@@ -30,6 +31,7 @@ class Query:
         :type template_vars: dict
         """
         self.source = source
+        self.name = splitext(basename(source))[0]
         self.template_vars = template_vars if template_vars is not None else dict()
         self.__interpolated = None
         self.__executable_str = None
