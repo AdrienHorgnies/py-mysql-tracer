@@ -22,6 +22,7 @@ class CursorProvider(metaclass=MetaSingleton):
 
         self.connection = connector.connect(
             host=chest.host,
+            port=chest.port,
             user=chest.user,
             db=chest.database,
             passwd=password)
