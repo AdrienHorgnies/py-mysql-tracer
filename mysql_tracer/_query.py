@@ -40,7 +40,7 @@ class Query:
     def __repr__(self):
         return 'Query(' \
                'source={source!r}, ' \
-               'name={name}' \
+               'name={name!r}, ' \
                'template_vars={template_vars!r}, ' \
                'interpolated={interpolated!r}, ' \
                'executable_str={executable_str!r}, ' \
