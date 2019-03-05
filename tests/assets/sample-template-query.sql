@@ -13,5 +13,7 @@ LEFT JOIN job
 
 WHERE
     title $disappear IN ('${job}')
+    AND ${var_i_wont_provide_1}
+    AND ${var_i_wont_provide_2}
     AND this line will disappear because it has an ${unknown} template placeholder
 ;

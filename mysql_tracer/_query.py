@@ -61,7 +61,7 @@ class Query:
         else:
             template = Template(open(self.source).read())
             interpolated = template.safe_substitute(**self.template_vars)
-            unprovided_filtered = re.sub('\n.*\\${\\w+}.*\n', '\n', interpolated)
+            unprovided_filtered = re.sub(r'\n.*\${\w+}.*', '', interpolated)
             self.__interpolated = unprovided_filtered
             return self.__interpolated
 
