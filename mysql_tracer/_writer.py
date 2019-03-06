@@ -22,7 +22,7 @@ def write(query, destination=None):
         report_file.write(REPORT_TEMPLATE.format(
             start=query.result.execution_start.isoformat(),
             end=query.result.execution_end.isoformat(),
-            duration=query.result.duration,
+            duration=query.result.execution_time,
             count=len(query.result.rows),
             file=basename(export_path) if len(query.result.rows) > 0 else None
         ))

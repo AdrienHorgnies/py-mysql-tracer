@@ -16,7 +16,7 @@ def query(asset, asset_copy):
     query_mock.result = mock.MagicMock()
     query_mock.result.execution_start = datetime(1992, 3, 4, 11, 0, 5, 654321)
     query_mock.result.execution_end = datetime(1992, 3, 4, 11, 0, 5, 987654)
-    query_mock.result.duration = timedelta(microseconds=333333)
+    query_mock.result.execution_time = timedelta(microseconds=333333)
     query_mock.result.rows = [
         ('Adrien Horgnies', 'analyst developer'),
         ('Constance de Lannoy', 'secretary')

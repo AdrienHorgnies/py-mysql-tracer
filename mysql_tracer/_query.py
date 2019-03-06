@@ -114,7 +114,7 @@ class Query:
     def display(self):
         print('source: ' + self.source)
         print('sql: ' + self.executable_str)
-        print('execution time: {}'.format(self.result.duration))
+        print('execution time: {}'.format(self.result.execution_time))
         print('rows count: {}'.format(len(self.result.rows)))
         print('description: {}'.format(self.result.description))
         for row in self.result.rows:
@@ -157,7 +157,7 @@ class Result:
         self.execution_start = datetime.now()
         cursor.execute(query_str)
         self.execution_end = datetime.now()
-        self.duration = self.execution_end - self.execution_start
+        self.execution_time = self.execution_end - self.execution_start
         self.rows = cursor.fetchall()
         self.description = tuple(column[0] for column in cursor.description)
 
@@ -165,6 +165,6 @@ class Result:
         return 'Result(' \
                'execution_start={execution_start}, ' \
                'execution_end={execution_end}, ' \
-               'duration={duration}, ' \
+               'execution_time={execution_time}, ' \
                'rows={rows}, ' \
                'description={description})'.format(**vars(self))

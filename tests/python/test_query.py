@@ -39,7 +39,7 @@ def test_result(mock_datetime, mock_cp, asset):
 
     assert actual.execution_start == datetime(1992, 3, 4, 11, 0, 5, 654321)
     assert actual.execution_end == datetime(1992, 3, 4, 11, 0, 5, 987654)
-    assert actual.duration == timedelta(microseconds=333333)
+    assert actual.execution_time == timedelta(microseconds=333333)
     assert actual.rows == [
         ('Adrien Horgnies', 'analyst developer'),
         ('Constance de Lannoy', 'secretary')
