@@ -17,7 +17,7 @@ def main():
     queries = [Query(path, dict(template_vars)) for path in config['query']]
     for query in queries:
         if config['display']:
-            print(query)
+            query.display()
         else:
             query.export(destination=config['destination'])
 

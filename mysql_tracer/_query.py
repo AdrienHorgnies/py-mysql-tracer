@@ -111,6 +111,15 @@ class Query:
         """
         return writer.write(self, destination)
 
+    def display(self):
+        print('source: ' + self.source)
+        print('sql: ' + self.executable_str)
+        print('execution time: {}'.format(self.result.duration))
+        print('rows count: '.format(len(self.result.rows)))
+        print('description: {}'.format(self.result.description))
+        for row in self.result.rows:
+            print(row)
+
 
 def normalize_space(line):
     return re.sub(' +', ' ', line)
