@@ -1,10 +1,10 @@
-import configuration
+from mysql_tracer import _configuration
 from mysql_tracer import chest
 from mysql_tracer._query import Query
 
 
 def main():
-    config = configuration.get()
+    config = _configuration.get()
 
     chest.host = config['host']
     chest.port = config['port']

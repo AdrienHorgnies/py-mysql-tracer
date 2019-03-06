@@ -59,10 +59,11 @@ def __add_configurable_argument(parser, configuration, keys, *args, **kwargs):
 
     if item is not None:
         kwargs['help'] = kwargs['help'] + __configured_help.format(keys='.'.join(keys), value=item)
+        kwargs['default'] = item
     else:
         kwargs['help'] = kwargs['help'] + __configurable_help.format(keys='.'.join(keys))
 
-    return parser.add_argument(*args, default=item, **kwargs)
+    return parser.add_argument(*args, **kwargs)
 
 
 def __parse_args(configuration):
@@ -79,9 +80,10 @@ def __parse_args(configuration):
                        help='Define a key value pair to substitute the ${key} by the value within the query')
 
     db = parser.add_argument_group(title='Database')
-    db.add_argument('--host', required=True, help='MySQL server host')
-    db.add_argument('--port', required=False, default=3306, type=int, help='MySQL server port')
-    db.add_argument('--user', required=True, help='MySQL server user')
+    __add_configurable_argument(db, configuration, ['host'], '--host', required=True, help='MySQL server host')
+    __add_configurable_argument(db, configuration, ['port'], '--port', required=False, default=3306, type=int,
+                                help='MySQL server port')
+    __add_configurable_argument(db, configuration, ['user'], '--user', required=True, help='MySQL server user')
     db.add_argument('--database', help='MySQL database name')
 
     pwd = parser.add_argument_group(title='Password')
