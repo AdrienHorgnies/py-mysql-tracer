@@ -115,7 +115,7 @@ class Query:
         print('source: ' + self.source)
         print('sql: ' + self.executable_str)
         print('execution time: {}'.format(self.result.duration))
-        print('rows count: '.format(len(self.result.rows)))
+        print('rows count: {}'.format(len(self.result.rows)))
         print('description: {}'.format(self.result.description))
         for row in self.result.rows:
             print(row)
