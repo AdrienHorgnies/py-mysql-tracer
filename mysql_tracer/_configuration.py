@@ -5,6 +5,8 @@ from pathlib import Path
 
 import yaml
 
+from mysql_tracer import chest
+
 __user_config_path = Path.home().joinpath('.config', 'mysql-tracer', 'application.yml')
 __configuration = None
 __configured_help = '\nThis item is configured under {keys} with value `{value}`.' \
@@ -110,3 +112,14 @@ def get():
         __configuration = __parse_args(__get_file_configuration())
 
     return __configuration
+
+
+def auto_configure():
+    config = __get_file_configuration()
+
+    chest.host = config.get('host')
+    chest.port = config.get('port')
+    chest.user = config.get('user')
+    chest.database = config.get('database')
+    chest.ask_password = config.get('ask_password')
+    chest.store_password = config.get('store_password')
