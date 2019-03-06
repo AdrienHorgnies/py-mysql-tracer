@@ -13,7 +13,7 @@ def main():
     chest.ask_password = config['ask_password']
     chest.store_password = config['store_password']
 
-    template_vars = config['template_vars'] if config['template_vars'] else None
+    template_vars = config['template_vars'] if config['template_vars'] else []
     queries = [Query(path, dict(template_vars)) for path in config['query']]
     for query in queries:
         if config['display']:
