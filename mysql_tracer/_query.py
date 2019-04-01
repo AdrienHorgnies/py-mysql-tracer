@@ -36,8 +36,8 @@ class Query:
         self.__interpolated = None
         self.__executable_str = None
         self.__result = None
-        self.execution_save = None
-        self.result_export = None
+        self.__execution_save = None
+        self.__result_export = None
 
     def __repr__(self):
         return 'Query(' \
@@ -99,6 +99,20 @@ class Query:
         else:
             self.__result = Result(self.executable_str)
             return self.__result
+        
+    @property
+    def execution_save(self):
+        if self.__execution_save is None:
+            raise RuntimeError('Accessing execution_save without prior export.')
+        
+        return self.__execution_save
+        
+    @property
+    def result_export(self):
+        if self.__result_export is None:
+            raise RuntimeError('Accessing result_export without prior export.')
+
+        return self.__result_export
 
     def export(self, destination=None):
         """
@@ -109,7 +123,7 @@ class Query:
         :param destination: directory where to create the report and result files
         :type destination: str | os.PathLike
         """
-        self.execution_save, self.result_export = writer.write(self, destination)
+        self.__execution_save, self.__result_export = writer.write(self, destination)
 
     def display(self):
         print('source: ' + self.source)
