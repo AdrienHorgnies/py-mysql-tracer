@@ -18,8 +18,6 @@ class Query:
     executed query if no substitute value is provided !
 
     Can execute said query and hold the results through the class Result.
-
-    Properties are lazy evaluated and are evaluated only once. export and result trigger the execution of the query.
     """
 
     def __init__(self, source, template_vars=None):
@@ -33,9 +31,9 @@ class Query:
         self.source = source
         self.name = splitext(basename(source))[0]
         self.template_vars = template_vars if template_vars is not None else dict()
-        self.__interpolated = None
-        self.__executable_str = None
-        self.__result = None
+        self.interpolated = self.__interpolated()
+        self.executable_str = self.__executable_str()
+        self.result = Result(self.executable_str)
 
     def __repr__(self):
         return 'Query(' \
@@ -47,8 +45,7 @@ class Query:
                'result={result})'.format(**vars(self), interpolated=self.interpolated,
                                          executable_str=self.executable_str, result=self.result)
 
-    @property
-    def interpolated(self):
+    def __interpolated(self):
         """
         String representation of the source file content after substituting template keys by their values and stripping
         line containing template keys that were not provided.
@@ -56,47 +53,23 @@ class Query:
         :return: the content of the source file after template interpolation
         :rtype: str
         """
-        if self.__interpolated is not None:
-            return self.__interpolated
-        else:
-            template = Template(open(self.source).read())
-            interpolated = template.safe_substitute(**self.template_vars)
-            unprovided_filtered = re.sub(r'\n.*\${\w+}.*', '', interpolated)
-            self.__interpolated = unprovided_filtered
-            return self.__interpolated
+        template = Template(open(self.source).read())
+        interpolated = template.safe_substitute(**self.template_vars)
+        # remove lines for which template variables weren't provided
+        return re.sub(r'\n.*\${\w+}.*', '', interpolated)
 
-    @property
-    def executable_str(self):
+    def __executable_str(self):
         """
         Single line string representation of the query after interpolation
 
         :return: Single line string representation of the query after interpolation
         :rtype: str
         """
-        if self.__executable_str is not None:
-            return self.__executable_str
-        else:
-            self.__executable_str = ' '.join([
-                normalize_space(strip_inline_comment(line).strip())
-                for line in self.interpolated.split('\n')
-                if not is_comment(line) and not is_blank(line)
-            ])
-            return self.__executable_str
-
-    @property
-    def result(self):
-        """
-        The result of the execution of the query, the value is processed at first access then retrieved every other
-        times.
-
-        :return: the result of the execution of the query
-        :rtype: Result
-        """
-        if self.__result is not None:
-            return self.__result
-        else:
-            self.__result = Result(self.executable_str)
-            return self.__result
+        return ' '.join([
+            normalize_space(strip_inline_comment(line).strip())
+            for line in self.interpolated.split('\n')
+            if not is_comment(line) and not is_blank(line)
+        ])
 
     def export(self, destination=None):
         """
