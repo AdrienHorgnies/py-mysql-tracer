@@ -1,3 +1,4 @@
+import logging
 import re
 from datetime import datetime
 from os.path import splitext, basename
@@ -5,6 +6,9 @@ from string import Template
 
 from mysql_tracer import _writer as writer
 from mysql_tracer._cursor_provider import CursorProvider
+
+q_log = logging.getLogger('mysql_tracer.Query')
+r_log = logging.getLogger('mysql_tracer.Result')
 
 
 class Query:
@@ -28,12 +32,14 @@ class Query:
          dictionary value.
         :type template_vars: dict
         """
+        q_log.debug('Initiating Query with source={} and template_vars={}'.format(source, template_vars))
         self.source = source
         self.name = splitext(basename(source))[0]
         self.template_vars = template_vars if template_vars is not None else dict()
         self.interpolated = self.__interpolated()
         self.executable_str = self.__executable_str()
         self.result = Result(self.executable_str)
+        q_log.debug('Initiated Query with source={} and template_vars={}'.format(source, template_vars))
 
     def __repr__(self):
         return 'Query(' \
@@ -127,11 +133,13 @@ class Result:
         :type query_str: str
         """
         cursor = CursorProvider.cursor()
+        r_log.debug('Executing {}'.format(query_str))
         self.execution_start = datetime.now()
         cursor.execute(query_str)
         self.execution_end = datetime.now()
         self.execution_time = self.execution_end - self.execution_start
         self.rows = cursor.fetchall()
+        r_log.debug('Got {} rows'.format(len(self.rows)))
         self.description = tuple(column[0] for column in cursor.description)
 
     def __repr__(self):
