@@ -16,7 +16,7 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     install_requires=['mysql-connector-python', 'pyyaml', 'alone', 'keyring'],
     entry_points={
-        'console_scripts': ['mysql_tracer=mysql_tracer.__main__:main']
+        'console_scripts': ['mst=mysql_tracer.__main__:main']
     },
     license='MIT License',
     classifiers=[
