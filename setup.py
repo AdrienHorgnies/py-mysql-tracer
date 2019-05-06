@@ -1,7 +1,7 @@
 
 import setuptools
 
-version = '1.2.9'
+version = '1.3.0'
 
 setuptools.setup(
     name='mysql_tracer',
