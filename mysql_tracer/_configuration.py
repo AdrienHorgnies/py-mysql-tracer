@@ -1,4 +1,5 @@
 import argparse
+import logging
 import os.path
 import re as __re
 from pathlib import Path
@@ -6,6 +7,8 @@ from pathlib import Path
 import yaml
 
 from mysql_tracer import chest
+
+log = logging.getLogger('mysql_tracer.configuration')
 
 __user_config_path = Path.home().joinpath('.config', 'mysql-tracer', 'application.yml')
 __configuration = None
@@ -29,8 +32,10 @@ __configure_yaml()
 
 def __get_file_configuration(path=__user_config_path):
     if not os.path.exists(path):
+        log.debug('No configuration file found, constructing configuration from zero')
         return dict()
     with open(str(path)) as config_file:
+        log.debug('Configuration file {} found'.format(path))
         return yaml.load(config_file)
 
 
@@ -115,6 +120,7 @@ def get():
 
 
 def auto_configure():
+    log.debug('Auto configuring itself using {}'.format(__user_config_path))
     config = __get_file_configuration()
 
     chest.host = config.get('host')
