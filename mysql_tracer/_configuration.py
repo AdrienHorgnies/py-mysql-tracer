@@ -9,6 +9,7 @@ import yaml
 from mysql_tracer import chest
 
 log = logging.getLogger('mysql_tracer.configuration')
+base_logger = logging.getLogger('mysql_tracer')
 
 __user_config_path = Path.home().joinpath('.config', 'mysql-tracer', 'application.yml')
 __configuration = None
@@ -80,6 +81,9 @@ def __parse_args(configuration):
     parser = argparse.ArgumentParser(description=description,
                                      formatter_class=argparse.RawTextHelpFormatter)
 
+    __add_configurable_argument(parser, configuration, ['logging', 'level'], '--debug', action='store_true',
+                                default=False, required=False, help='Display debug messages')
+
     query = parser.add_argument_group(title='Queries')
     query.add_argument('query', nargs='+', help='Path to a file containing a single sql statement')
     query.add_argument('-t', '--template-var', dest='template_vars', nargs=2, metavar=('KEY', 'VALUE'),
@@ -105,6 +109,13 @@ def __parse_args(configuration):
     excl_actions.add_argument('--display', default=False, action='store_true',
                               help='Do not export results but display them to stdout')
     args = parser.parse_args()
+
+    if args.debug:
+        base_logger.setLevel(logging.DEBUG)
+        sh = logging.StreamHandler()
+        sh.setLevel(logging.DEBUG)
+        sh.setFormatter(logging.Formatter(fmt='%(asctime)s %(levelname)s - %(name)s: %(message)s'))
+        base_logger.addHandler(sh)
 
     configuration.update(vars(args))
 
