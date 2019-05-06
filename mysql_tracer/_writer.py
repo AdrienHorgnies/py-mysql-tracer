@@ -1,5 +1,8 @@
 import csv
+import logging
 from os.path import join, dirname, basename, splitext
+
+log = logging.getLogger('mysql_tracer.writer')
 
 REPORT_TEMPLATE = '''
 -- START TIME: {start}
@@ -17,6 +20,8 @@ def write(query, destination=None):
     report_path = join(directory, prefix + basename(query.source))
     export_path = splitext(report_path)[0] + '.csv'
 
+    log.debug('Writing report for single query {} to {}'.format(query.name, directory))
+
     with open(report_path, 'w') as report_file:
         report_file.write(query.interpolated)
         report_file.write(REPORT_TEMPLATE.format(
@@ -29,6 +34,7 @@ def write(query, destination=None):
 
     if len(query.result.rows) > 0:
         with open(export_path, 'w') as export_file:
+            log.debug('Exporting results to {}'.format(export_path))
             csv_writer = csv.writer(export_file, quoting=csv.QUOTE_ALL)
             csv_writer.writerow(query.result.description)
             for row in query.result.rows:
