@@ -4,11 +4,13 @@ A MySQL client to run queries, write execution reports and export results.
 It is made with the purpose to support SELECT statements only.
 Other statements will work but the features offered by this module will provide little help or make no sense.
 
+It uses Python 3.
+
 ## Usage
 
 This can be used as a command line tool:
 ```
-usage: mysql_tracer [-h] --host HOST --user USER [--database DATABASE] [-a]
+usage: mst [-h] --host HOST --user USER [--database DATABASE] [-a]
                     [-s] [-t KEY VALUE] [-d DESTINATION | --display]
                     query [query ...]
 
@@ -41,10 +43,9 @@ an export of the result in the csv format.
 
 You can install dependencies with `pip install -r requirements.txt`.
 
-You can run tests with `pytest` but you need to set `PYTHONPATH`.
+You can run tests with `pytest`.
 ```
-$ export PYTHONPATH=mysql_tracer
-$ python3 -m pytest
+$ pytest
 ```
 
-Or you can setup a test run with your IDE without any particular configuration.
+Or you can setup a test run with your IDE.
