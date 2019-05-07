@@ -139,7 +139,7 @@ class Result:
         self.execution_end = datetime.now()
         self.execution_time = self.execution_end - self.execution_start
         self.rows = cursor.fetchall()
-        r_log.debug('Got {} rows'.format(len(self.rows)))
+        r_log.debug('Got {} row(s)'.format(len(self.rows)))
         self.description = tuple(column[0] for column in cursor.description)
 
     def __repr__(self):
