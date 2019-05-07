@@ -1,6 +1,6 @@
 import csv
 import logging
-from os.path import join, dirname, basename, splitext
+from os.path import join, dirname, basename, splitext, realpath
 
 log = logging.getLogger('mysql_tracer.writer')
 
@@ -20,7 +20,7 @@ def write(query, destination=None):
     report_path = join(directory, prefix + basename(query.source))
     export_path = splitext(report_path)[0] + '.csv'
 
-    log.debug('Writing report for single query {} to {}'.format(query.name, directory))
+    log.debug('Writing report for single query {} to {}'.format(query.name, realpath(directory)))
 
     with open(report_path, 'w') as report_file:
         report_file.write(query.interpolated)
