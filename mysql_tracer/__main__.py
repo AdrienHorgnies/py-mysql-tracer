@@ -1,12 +1,12 @@
 from mysql_tracer import _configuration
-from mysql_tracer._query import Query
 from mysql_tracer._cursor_provider import CursorProvider
+from mysql_tracer._query import Query
 
 
 def main():
     config = _configuration.get()
 
-    CursorProvider(config['host'], config['user'], config['port'], config['database'], config['ask_password'],
+    CursorProvider.init(config['host'], config['user'], config['port'], config['database'], config['ask_password'],
                    config['store_password'])
 
     template_vars = config['template_vars'] if config['template_vars'] else []
