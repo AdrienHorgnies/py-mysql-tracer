@@ -21,7 +21,7 @@ def cursor():
 
 @mock.patch('mysql_tracer._query.CursorProvider')
 def test_executable_str(mock_cp, cursor):
-    mock_cp.cursor.return_value = cursor
+    mock_cp.get.return_value = cursor
 
     actual = _query.Query('tests/assets/sample-query.sql')
 
@@ -31,7 +31,7 @@ def test_executable_str(mock_cp, cursor):
 
 @mock.patch('mysql_tracer._query.CursorProvider')
 def test_template_executable_str(mock_cp, cursor):
-    mock_cp.cursor.return_value = cursor
+    mock_cp.get.return_value = cursor
     actual = _query.Query('tests/assets/sample-template-query.sql',
                           template_vars=dict(job='developer', disappear='', donotexist=''))
 
@@ -42,7 +42,7 @@ def test_template_executable_str(mock_cp, cursor):
 @mock.patch('mysql_tracer._query.CursorProvider')
 @mock.patch('mysql_tracer._query.datetime')
 def test_result(mock_datetime, mock_cp, cursor, asset):
-    mock_cp.cursor.return_value = cursor
+    mock_cp.get.return_value = cursor
     mock_datetime.now.side_effect = (datetime(1992, 3, 4, 11, 0, 5, 654321),
                                      datetime(1992, 3, 4, 11, 0, 5, 987654))
 
