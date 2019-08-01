@@ -6,8 +6,6 @@ from pathlib import Path
 
 import yaml
 
-from mysql_tracer import chest
-
 log = logging.getLogger('mysql_tracer.configuration')
 base_logger = logging.getLogger('mysql_tracer')
 
@@ -128,15 +126,3 @@ def get():
         __configuration = __parse_args(__get_file_configuration())
 
     return __configuration
-
-
-def auto_configure():
-    log.debug('Auto configuring itself using {}'.format(__user_config_path))
-    config = __get_file_configuration()
-
-    chest.host = config.get('host')
-    chest.port = config.get('port')
-    chest.user = config.get('user')
-    chest.database = config.get('database')
-    chest.ask_password = config.get('ask_password')
-    chest.store_password = config.get('store_password')
