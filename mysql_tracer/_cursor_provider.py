@@ -1,5 +1,6 @@
 import logging
 from getpass import getpass
+import pdb
 
 import keyring
 from mysql import connector
@@ -46,7 +47,7 @@ class CursorProvider:
                 log.error('Failed to store password into keyring')
 
     def __del__(self):
-        if hasattr(self, 'connection') and self.connection.is_connected():
+        if CursorProvider.connection is not None and CursorProvider.connection.is_connected():
             self.connection.close()
 
     @staticmethod
