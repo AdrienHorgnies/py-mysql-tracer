@@ -3,5 +3,4 @@ mysql-connector-python
 mock
 pytest
 coverage
-alone
 keyring

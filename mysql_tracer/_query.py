@@ -132,7 +132,7 @@ class Result:
         :param query_str: the query to execute
         :type query_str: str
         """
-        cursor = CursorProvider.cursor()
+        cursor = CursorProvider.get()
         r_log.debug('Executing {}'.format(query_str))
         self.execution_start = datetime.now()
         cursor.execute(query_str)

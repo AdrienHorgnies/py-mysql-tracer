@@ -11,7 +11,9 @@ class CursorProvider:
 
     connection = None
 
-    def __init__(self, host, user, ask_password=False, store_password=False, port=3306, database=None):
+    def __init__(self, host, user, port=None, database=None, ask_password=False, store_password=False):
+        port = port if port is not None else 3306
+
         service = 'mysql-tracer/{host}'.format(host=host)
 
         keyring_password = None
