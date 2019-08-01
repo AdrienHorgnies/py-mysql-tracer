@@ -5,15 +5,17 @@ import keyring
 from mysql import connector
 from mysql.connector.errors import ProgrammingError
 
-log = logging.getLogger('mysql_tracer.CursorProvider')
+log = logging.getLogger(__name__)
 
 
 class CursorProvider:
     instance = None
 
-    @staticmethod
-    def get():
-        assert CursorProvider.instance.connection is not None, 'You must initialize CursorProvider before using it'
+    @classmethod
+    def get(cls):
+        if CursorProvider.instance is None:
+            raise AttributeError('Trying to get instance before instantiating, call {} from {}.{} beforehand'
+                                 .format(CursorProvider.init.__name__, __name__, cls.__name__))
         return CursorProvider.instance.connection.cursor()
 
     @staticmethod
@@ -25,14 +27,14 @@ class CursorProvider:
 
         def __init__(self, host, user, port=None, database=None, ask_password=False, store_password=False):
             port = port if port is not None else 3306
-            log.debug('Trying to connect to the database {}@{}:{}/{}'.format(user, host, port, database))
+            log.debug('Trying to connect to the database %s@%s:%s/%s', user, host, port, database)
 
             service = 'mysql-tracer/{host}'.format(host=host)
 
             if ask_password:
                 self.connect_with_retry(host, port, user, database, service, store_password)
             else:
-                log.debug('Retrieving password from keyring ({user}@{service})'.format(user=user, service=service))
+                log.debug('Retrieving password from keyring (%s@%s)', user, service)
                 keyring_password = keyring.get_password(service, user)
 
                 if keyring_password is not None:
@@ -57,6 +59,7 @@ class CursorProvider:
                     raise error
 
             if store_password:
+                log.info('Storing password into keyring (%s@%s)', user, service)
                 keyring.set_password(service, user, password)
 
         def __del__(self):
