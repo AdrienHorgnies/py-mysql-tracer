@@ -10,11 +10,20 @@ log = logging.getLogger('mysql_tracer')
 def __parse_args():
     description = 'CLI script to run queries and export results.'
 
-    parser = argparse.ArgumentParser(description=description,
-                                     formatter_class=argparse.RawTextHelpFormatter)
+    log_args_parser = get_log_level_args_parser()
 
-    parser.add_argument('--debug', action='store_true',
-                        default=False, required=False, help='Display debug messages')
+    log_args, remaining_args = log_args_parser.parse_known_args()
+
+    if log_args.log_level is not None:
+        log.setLevel(log_args.log_level)
+        console = logging.StreamHandler()
+        console.setLevel(log_args.log_level)
+        console.setFormatter(logging.Formatter(fmt='%(asctime)s %(levelname)s - %(name)s: %(message)s'))
+        log.addHandler(console)
+
+    parser = argparse.ArgumentParser(parents=[log_args_parser],
+                                     description=description,
+                                     formatter_class=argparse.RawTextHelpFormatter)
 
     query = parser.add_argument_group(title='Queries')
     query.add_argument('query', nargs='+', help='Path to a file containing a single sql statement')
@@ -26,12 +35,12 @@ def __parse_args():
     db.add_argument('--host', required=True, help='MySQL server host')
     db.add_argument('--port', required=False, default=3306, type=int,
                     help='MySQL server port')
-    db.add_argument('--user', required=True, help='MySQL server user')
+    db.add_argument('--user', required=True, help='MySQL database user')
     db.add_argument('--database', help='MySQL database name')
 
     pwd = parser.add_argument_group(title='Password')
     pwd.add_argument('-a', '--ask-password', default=False, action='store_true',
-                     help='Do not try to retrieve password from keyring, always ask password')
+                     help='Ask password; do not try to retrieve password from keyring')
     pwd.add_argument('-s', '--store-password', default=False, action='store_true',
                      help='Store password into keyring after connecting to the database')
 
@@ -40,9 +49,17 @@ def __parse_args():
     excl_actions.add_argument('-d', '--destination', help='Directory where to export results')
     excl_actions.add_argument('--display', default=False, action='store_true',
                               help='Do not export results but display them to stdout')
-    args = parser.parse_args()
 
-    return vars(args)
+    log_args = parser.parse_args(remaining_args)
+
+    return vars(log_args)
+
+
+def get_log_level_args_parser():
+    parser = argparse.ArgumentParser(add_help=False)
+    parser.add_argument('--log-level', choices=['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'])
+
+    return parser
 
 
 def main():
@@ -66,11 +83,10 @@ def main():
 
 
 if __name__ == '__main__':
-    print(log.name)
-    log.setLevel(logging.DEBUG)
-    sh = logging.StreamHandler()
-    sh.setLevel(logging.DEBUG)
-    sh.setFormatter(logging.Formatter(fmt='%(asctime)s %(levelname)s - %(name)s: %(message)s'))
-    log.addHandler(sh)
+    # log.setLevel(logging.DEBUG)
+    # sh = logging.StreamHandler()
+    # sh.setLevel(logging.DEBUG)
+    # sh.setFormatter(logging.Formatter(fmt='%(asctime)s %(levelname)s - %(name)s: %(message)s'))
+    # log.addHandler(sh)
 
     main()
