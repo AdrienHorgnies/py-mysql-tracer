@@ -86,10 +86,4 @@ def main():
 
 
 if __name__ == '__main__':
-    # log.setLevel(logging.DEBUG)
-    # sh = logging.StreamHandler()
-    # sh.setLevel(logging.DEBUG)
-    # sh.setFormatter(logging.Formatter(fmt='%(asctime)s %(levelname)s - %(name)s: %(message)s'))
-    # log.addHandler(sh)
-
     main()
