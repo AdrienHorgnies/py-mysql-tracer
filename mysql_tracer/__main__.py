@@ -8,28 +8,16 @@ from mysql_tracer._query import Query
 log = logging.getLogger('mysql_tracer')
 
 
-def __parse_args(config):
+def __parse_args(parents, remaining_args, defaults):
     description = 'CLI script to run queries and export results.'
 
-    log_args_parser = argparse.ArgumentParser(add_help=False)
-    log_args_parser.add_argument('--log-level', choices=['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'])
-
-    log_args, remaining_args = log_args_parser.parse_known_args()
-
-    if log_args.log_level is not None:
-        log.setLevel(log_args.log_level)
-        console = logging.StreamHandler()
-        console.setLevel(log_args.log_level)
-        console.setFormatter(logging.Formatter(fmt='%(asctime)s %(levelname)s - %(name)s: %(message)s'))
-        log.addHandler(console)
-
-    parser = argparse.ArgumentParser(parents=[log_args_parser],
+    parser = argparse.ArgumentParser(parents=parents,
                                      description=description,
                                      formatter_class=argparse.RawTextHelpFormatter)
 
     parser.set_defaults(**{
         'port': 3306,
-        **config
+        **defaults
     })
 
     query = parser.add_argument_group(title='Queries')
@@ -60,27 +48,41 @@ def __parse_args(config):
             action.required = False
 
     args = parser.parse_args(remaining_args)
-    print(args)
+    print(args)  # todo remove me
     return args
 
 
+def __parse_log_args():
+    log_args_parser = argparse.ArgumentParser(add_help=False)
+    log_args_parser.add_argument('--log-level', choices=['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'])
+    log_args, remaining_args = log_args_parser.parse_known_args()
+
+    if log_args.log_level is not None:
+        log.setLevel(log_args.log_level)
+        console = logging.StreamHandler()
+        console.setLevel(log_args.log_level)
+        console.setFormatter(logging.Formatter(fmt='%(asctime)s %(levelname)s - %(name)s: %(message)s'))
+        log.addHandler(console)
+
+    return log_args_parser, remaining_args
+
+
 def main():
+    log_args_parsers, remaining_args = __parse_log_args()
     config = _configuration.get()
-    args = __parse_args(config)
-    # if config is None:
-    #     args = __parse_args()
+    args = __parse_args([log_args_parsers], remaining_args, config)
 
-    CursorProvider.init(args['host'], args['user'], args['port'], args['database'], args['ask_password'],
-                        args['store_password'])
+    CursorProvider.init(args.host, args.user, args.port, args.database, args.ask_password,
+                        args.store_password)
 
-    template_vars = args['template_vars'] if args['template_vars'] else []
-    queries = [Query(path, dict(template_vars)) for path in args['query']]
+    template_vars = args.template_vars if args.template_vars else []
+    queries = [Query(path, dict(template_vars)) for path in args.query]
 
     for query in queries:
-        if args['display']:
+        if args.display:
             query.display()
         else:
-            query.export(destination=args['destination'])
+            query.export(destination=args.destination)
 
 
 if __name__ == '__main__':
