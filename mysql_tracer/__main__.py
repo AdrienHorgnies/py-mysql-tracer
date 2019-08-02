@@ -1,3 +1,8 @@
+"""
+CLI script to run MySQL SELECT statements
+
+It produces a copy of provided file with additional metadata and an export of results in CSV format
+"""
 import argparse
 import logging
 
@@ -9,10 +14,15 @@ log = logging.getLogger('mysql_tracer')
 
 
 def get_main_args_parser(parents, defaults):
-    description = 'CLI script to run queries and export results.'
+    """
+    Parser for the arguments required to run mysql_tracer.
 
+    :param parents: a list of parent argument parsers. They must NOT define a help option or else they will clash.
+    :param defaults: a dictionary with default values. All actions with default values are set to not required.
+    :return: an argument parser
+    """
     parser = argparse.ArgumentParser(parents=parents,
-                                     description=description,
+                                     description=__doc__,
                                      formatter_class=argparse.RawTextHelpFormatter)
 
     parser.set_defaults(**{
@@ -52,17 +62,26 @@ def get_main_args_parser(parents, defaults):
 
 
 def get_log_args_parser():
-    parser = argparse.ArgumentParser(add_help=False)
-    parser.add_argument('--log-level', choices=['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'])
-    # log_args, remaining_args = log_args_parser.parse_known_args()
+    """
+    Parser for the arguments required to set logger level
 
-    # if log_args.log_level is not None:
-    #     configure_logger(log_args.log_level)
+    :return: an argument parser
+    """
+    parser = argparse.ArgumentParser(add_help=False)
+    parser.add_argument('--log-level', choices=['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'],
+                        help='Verbosity level of the logger')
 
     return parser
 
 
 def configure_logger(log_level):
+    """
+    Set level of the main logger and add a console handler with the same level
+
+    :param log_level: verbosity level of the logger
+    :type log_level: 'DEBUG' | 'INFO' | 'WARNING' | 'ERROR' | 'CRITICAL'
+    :return: None
+    """
     log.setLevel(log_level)
     console = logging.StreamHandler()
     console.setLevel(log_level)
