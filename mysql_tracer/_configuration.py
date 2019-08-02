@@ -5,7 +5,7 @@ from pathlib import Path
 
 log = logging.getLogger(__name__)
 
-__user_config_path = Path.home().joinpath('.config', 'mysql-tracer', 'application.yml')
+__user_config_path = Path.home().joinpath('.config', 'mysql-tracer', 'mysql-tracer.ini')
 __configuration = None
 __configured_help = '\nThis item is configured under {keys} with value `{value}`.' \
                     '\nSetting this option will override this value.'
@@ -38,8 +38,8 @@ def __find_config(config_name):
 def get():
     config_path = __find_config('mysql-tracer.ini')
     if config_path is None:
-        return None
+        return dict()
 
-    config_parser = configparser.SafeConfigParser()
+    config_parser = configparser.ConfigParser()
     config_parser.read(config_path)
     return dict(config_parser.items('mysql_tracer'))
