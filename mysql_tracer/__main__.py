@@ -21,7 +21,7 @@ def get_main_args_parser(parents, defaults):
     :param defaults: a dictionary with default values. All actions with default values are set to not required.
     :return: an argument parser
     """
-    parser = argparse.ArgumentParser(parents=parents,
+    parser = argparse.ArgumentParser(parents=parents + [get_database_args_parser()],
                                      description=__doc__,
                                      formatter_class=argparse.RawTextHelpFormatter)
 
@@ -35,18 +35,6 @@ def get_main_args_parser(parents, defaults):
     query.add_argument('-t', '--template-var', dest='template_vars', nargs=2, metavar=('KEY', 'VALUE'),
                        action='append',
                        help='Define a key value pair to substitute the ${key} by the value within the query')
-
-    db = parser.add_argument_group(title='Database')
-    db.add_argument('--host', required=True, help='MySQL server host')
-    db.add_argument('--port', type=int, help='MySQL server port')
-    db.add_argument('--user', required=True, help='MySQL database user')
-    db.add_argument('--database', help='MySQL database name')
-
-    pwd = parser.add_argument_group(title='Password')
-    pwd.add_argument('-a', '--ask-password', action='store_true',
-                     help='Ask password; do not try to retrieve password from keyring')
-    pwd.add_argument('-s', '--store-password', action='store_true',
-                     help='Store password into keyring after connecting to the database')
 
     export = parser.add_argument_group(title='Export')
     excl_actions = export.add_mutually_exclusive_group()
@@ -70,6 +58,24 @@ def get_log_args_parser():
     parser = argparse.ArgumentParser(add_help=False)
     parser.add_argument('--log-level', choices=['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'],
                         help='Verbosity level of the logger')
+
+    return parser
+
+
+def get_database_args_parser():
+    parser = argparse.ArgumentParser(add_help=False)
+
+    db = parser.add_argument_group(title='Database')
+    db.add_argument('--host', required=True, help='MySQL server host')
+    db.add_argument('--port', type=int, help='MySQL server port')
+    db.add_argument('--user', required=True, help='MySQL database user')
+    db.add_argument('--database', help='MySQL database name')
+
+    pwd = parser.add_argument_group(title='Password')
+    pwd.add_argument('-a', '--ask-password', action='store_true',
+                     help='Ask password; do not try to retrieve password from keyring')
+    pwd.add_argument('-s', '--store-password', action='store_true',
+                     help='Store password into keyring after connecting to the database')
 
     return parser
 
