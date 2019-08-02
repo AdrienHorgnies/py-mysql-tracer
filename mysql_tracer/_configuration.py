@@ -1,3 +1,4 @@
+import configparser
 import logging
 from os import access, R_OK, X_OK
 from pathlib import Path
@@ -25,9 +26,20 @@ def __find_config(config_name):
 
     if __user_config_path.exists():
         if access(str(__user_config_path), R_OK):
+            log.debug('Found configuration file %s', __user_config_path)
             return __user_config_path
         else:
             raise PermissionError(__user_config_path)
 
     log.debug('Did not find configuration file')
     return None
+
+
+def get():
+    config_path = __find_config('mysql-tracer.ini')
+    if config_path is None:
+        return None
+
+    config_parser = configparser.SafeConfigParser()
+    config_parser.read(config_path)
+    return dict(config_parser.items('mysql_tracer'))
