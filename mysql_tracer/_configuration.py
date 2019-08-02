@@ -6,10 +6,6 @@ from pathlib import Path
 log = logging.getLogger(__name__)
 
 __user_config_path = Path.home().joinpath('.config', 'mysql-tracer', 'mysql-tracer.ini')
-__configuration = None
-__configured_help = '\nThis item is configured under {keys} with value `{value}`.' \
-                    '\nSetting this option will override this value.'
-__configurable_help = '\nThis item can be configured under {keys}.'
 
 
 def __find_config(config_name):
