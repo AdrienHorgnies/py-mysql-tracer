@@ -1,4 +1,3 @@
-pyyaml
 mysql-connector-python
 mock
 pytest

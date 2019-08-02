@@ -1,4 +1,3 @@
-
 import setuptools
 
 version = '1.3.0'
@@ -14,7 +13,7 @@ setuptools.setup(
     url='https://github.com/AdrienHorgnies/py-mysql-tracer',
     download_url='https://github.com/AdrienHorgnies/py-mysql-tracer/archive/{version}.tar.gz'.format(version=version),
     packages=setuptools.find_packages(),
-    install_requires=['mysql-connector-python', 'pyyaml', 'alone', 'keyring'],
+    install_requires=['mysql-connector-python', 'keyring'],
     entry_points={
         'console_scripts': ['mst=mysql_tracer.__main__:main']
     },
