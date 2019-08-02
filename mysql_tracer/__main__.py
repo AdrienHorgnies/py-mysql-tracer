@@ -8,7 +8,7 @@ from mysql_tracer._query import Query
 log = logging.getLogger('mysql_tracer')
 
 
-def __parse_args(parents, remaining_args, defaults):
+def get_main_args_parser(parents, defaults):
     description = 'CLI script to run queries and export results.'
 
     parser = argparse.ArgumentParser(parents=parents,
@@ -43,46 +43,59 @@ def __parse_args(parents, remaining_args, defaults):
     excl_actions.add_argument('-d', '--destination', help='Directory where to export results')
     excl_actions.add_argument('--display', action='store_true', help='Do not export results but display them to stdout')
 
+    # noinspection PyProtectedMember
     for action in parser._actions:
         if action.required and action.default is not None:
             action.required = False
 
-    args = parser.parse_args(remaining_args)
-    print(args)  # todo remove me
-    return args
+    return parser
 
 
-def __parse_log_args():
-    log_args_parser = argparse.ArgumentParser(add_help=False)
-    log_args_parser.add_argument('--log-level', choices=['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'])
-    log_args, remaining_args = log_args_parser.parse_known_args()
+def get_log_args_parser():
+    parser = argparse.ArgumentParser(add_help=False)
+    parser.add_argument('--log-level', choices=['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'])
+    # log_args, remaining_args = log_args_parser.parse_known_args()
 
-    if log_args.log_level is not None:
-        log.setLevel(log_args.log_level)
-        console = logging.StreamHandler()
-        console.setLevel(log_args.log_level)
-        console.setFormatter(logging.Formatter(fmt='%(asctime)s %(levelname)s - %(name)s: %(message)s'))
-        log.addHandler(console)
+    # if log_args.log_level is not None:
+    #     configure_logger(log_args.log_level)
 
-    return log_args_parser, remaining_args
+    return parser
+
+
+def configure_logger(log_level):
+    log.setLevel(log_level)
+    console = logging.StreamHandler()
+    console.setLevel(log_level)
+    console.setFormatter(logging.Formatter(fmt='%(asctime)s %(levelname)s - %(name)s: %(message)s'))
+    log.addHandler(console)
 
 
 def main():
-    log_args_parsers, remaining_args = __parse_log_args()
+    log_args_parsers = get_log_args_parser()
+    log_args, remaining_args = log_args_parsers.parse_known_args()
+
+    if log_args.log_level:
+        configure_logger(log_args.log_level)
+
     config = _configuration.get()
-    args = __parse_args([log_args_parsers], remaining_args, config)
 
-    CursorProvider.init(args.host, args.user, args.port, args.database, args.ask_password,
-                        args.store_password)
+    main_args_parser = get_main_args_parser([log_args_parsers], config)
+    main_args = main_args_parser.parse_args()
 
-    template_vars = args.template_vars if args.template_vars else []
-    queries = [Query(path, dict(template_vars)) for path in args.query]
+    if not log_args.log_level and main_args.log_level:
+        configure_logger(main_args.log_level)
+
+    CursorProvider.init(main_args.host, main_args.user, main_args.port, main_args.database, main_args.ask_password,
+                        main_args.store_password)
+
+    template_vars = main_args.template_vars if main_args.template_vars else []
+    queries = [Query(path, dict(template_vars)) for path in main_args.query]
 
     for query in queries:
-        if args.display:
+        if main_args.display:
             query.display()
         else:
-            query.export(destination=args.destination)
+            query.export(destination=main_args.destination)
 
 
 if __name__ == '__main__':
