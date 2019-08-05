@@ -6,43 +6,41 @@ Other statements will work but the features offered by this module will provide 
 
 It uses Python 3.
 
+## Installing
+
+Package is available on PyPi:
+
+    pip install mysql_tracer
+
 ## Usage
 
-This can be used as a command line tool:
-```
-usage: mst [-h] --host HOST --user USER [--database DATABASE] [-a]
-                    [-s] [-t KEY VALUE] [-d DESTINATION | --display]
-                    query [query ...]
-
-positional arguments:
-  query                 Path to a file containing a single sql statement
-
-optional arguments:
-  -h, --help            show this help message and exit
-  --host HOST           MySQL server host
-  --user USER           MySQL server user
-  --database DATABASE   MySQL database name
-  -a, --ask-password    Do not try to retrieve password from keyring, always
-                        ask password
-  -s, --store-password  Store password into keyring after connecting to the
-                        database
-  -d DESTINATION, --destination DESTINATION
-                        Directory where to export results
-  --display             Do not export results but display them to stdout
-
-```
+This package defines a command line tool named `mst`.
+To get help about how to use it: `mst -h`
 
 It exposes the class `Query`. The constructor needs a path to a file containing a single sql statement and instances 
-expose the method `export` which creates a timestamped copy of the original file, appended with an execution report and
-an export of the result in the csv format. 
+expose the method `export` which creates a timestamped copy of the original file with additional metadata and
+the results exported in the CSV format.
 
 ## Development
 
-You can install dependencies with `pip install -r requirements.txt`.
+You can install development dependencies with `pip install -r requirements.txt`.
 
 You can run tests with `pytest`.
-```
-$ pytest
-```
 
-Or you can setup a test run with your IDE.
+    pytest
+
+You can run the module from sources by running the whole package:
+
+    python mysql_tracer -h
+
+You can build a package with setuptools.
+
+    python setup.py sdist bdist_wheel
+
+All dependencies have their version frozen.
+To install new versions of the dependencies, uninstall them, install the billing-check package and then freeze them again
+
+    pip freeze | xars pip uninstall -y
+    python setup.py sdist
+    pip install -e .[dev]
+    pip freeze | grep -v billing-check > requirements.txt
