@@ -6,9 +6,9 @@ It produces a copy of provided file with additional metadata and an export of re
 import logging
 
 from mysql_tracer import _configuration
-from mysql_tracer._cursor_provider import CursorProvider
 from mysql_tracer._query import Query
 from mysql_tracer.args_parser import get_main_args_parser, get_log_args_parser
+from mysql_tracer.cursor_provider import CursorProvider
 
 log = logging.getLogger('mysql_tracer')
 

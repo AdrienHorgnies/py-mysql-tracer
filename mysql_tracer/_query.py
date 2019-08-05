@@ -5,7 +5,7 @@ from os.path import splitext, basename
 from string import Template
 
 from mysql_tracer import _writer as writer
-from mysql_tracer._cursor_provider import CursorProvider
+from mysql_tracer.cursor_provider import CursorProvider
 
 q_log = logging.getLogger('mysql_tracer.Query')
 r_log = logging.getLogger('mysql_tracer.Result')
