@@ -40,7 +40,7 @@ You can build a package with setuptools.
 All dependencies have their version frozen.
 To install new versions of the dependencies, uninstall them, install the billing-check package and then freeze them again
 
-    pip freeze | xars pip uninstall -y
+    pip freeze | xargs pip uninstall -y
     python setup.py sdist
     pip install -e .[dev]
-    pip freeze | grep -v billing-check > requirements.txt
+    pip freeze | grep -v mysql-tracer > requirements.txt
