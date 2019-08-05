@@ -1,3 +1,8 @@
+"""
+CLI script to run MySQL SELECT statements
+
+It produces a copy of provided file with additional metadata and an export of results in CSV format
+"""
 import argparse
 
 
@@ -20,9 +25,6 @@ def get_main_args_parser(parents, defaults):
 
     query = parser.add_argument_group(title='Queries')
     query.add_argument('query', nargs='+', help='Path to a file containing a single sql statement')
-    query.add_argument('-t', '--template-var', dest='template_vars', nargs=2, metavar=('KEY', 'VALUE'),
-                       action='append',
-                       help='Define a key value pair to substitute the ${key} by the value within the query')
 
     export = parser.add_argument_group(title='Export')
     excl_actions = export.add_mutually_exclusive_group()

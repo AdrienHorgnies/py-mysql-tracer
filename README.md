@@ -26,9 +26,6 @@ optional arguments:
                         ask password
   -s, --store-password  Store password into keyring after connecting to the
                         database
-  -t KEY VALUE, --template-var KEY VALUE
-                        Define a key value pair to substitute the ${key} by
-                        the value within the query
   -d DESTINATION, --destination DESTINATION
                         Directory where to export results
   --display             Do not export results but display them to stdout

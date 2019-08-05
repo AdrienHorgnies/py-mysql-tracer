@@ -2,7 +2,6 @@ import logging
 import re
 from datetime import datetime
 from os.path import splitext, basename
-from string import Template
 
 from mysql_tracer import _writer as writer
 from mysql_tracer.cursor_provider import CursorProvider
@@ -18,68 +17,39 @@ class Query:
     The reason of existence of this class is to create traces of executed queries so you don't loose track of what you
     did.
 
-    Implements a templating system using the syntax ${key}. Line containing a template key will be stripped from
-    executed query if no substitute value is provided !
-
     Can execute said query and hold the results through the class Result.
     """
 
-    def __init__(self, source, template_vars=None):
+    def __init__(self, source):
         """
         :param source: the path to a file containing a single MySQL statement.
         :type source: str | os.PathLike
-        :param template_vars: template keys and values to substitute. A Key ${key} will be replaced by the corresponding
-         dictionary value.
-        :type template_vars: dict
         """
-        q_log.debug('Initiating Query with source={} and template_vars={}'.format(source, template_vars))
+        q_log.debug('Initiating Query(source={!r})'.format(source))
         self.source = source
         self.name = splitext(basename(source))[0]
-        self.template_vars = template_vars if template_vars is not None else dict()
-        self.interpolated = self.__interpolated()
         self.executable_str = self.__executable_str()
         self.result = Result(self.executable_str)
-        q_log.debug('Initiated Query with source={} and template_vars={}'.format(source, template_vars))
+        q_log.debug('Initiated Query(name={!r})'.format(self.name))
 
     def __repr__(self):
         return 'Query(' \
                'source={source!r}, ' \
                'name={name!r}, ' \
-               'template_vars={template_vars!r}, ' \
-               'interpolated={interpolated!r}, ' \
                'executable_str={executable_str!r}, ' \
-               'result={result})'.format(**vars(self), interpolated=self.interpolated,
-                                         executable_str=self.executable_str, result=self.result)
-
-    def __interpolated(self):
-        """
-        String representation of the source file content after substituting template keys by their values and stripping
-        line containing template keys that were not provided.
-
-        :return: the content of the source file after template interpolation
-        :rtype: str
-        """
-        template = Template(open(self.source).read())
-        interpolated = template.safe_substitute(**self.template_vars)
-        # remove lines for which template variables weren't provided
-        return re.sub(r'\n.*\${\w+}.*', '', interpolated)
+               'result={result})'.format(**vars(self))
 
     def __executable_str(self):
         """
-        Single line string representation of the query after interpolation
-
-        :return: Single line string representation of the query after interpolation
-        :rtype: str
+        Single line string representation of the query without comments
         """
-        return ' '.join([
-            normalize_space(strip_inline_comment(line).strip())
-            for line in self.interpolated.split('\n')
-            if not is_comment(line) and not is_blank(line)
-        ])
+        query_text = ' '.join([re.sub('(--|#).*', '', line) for line in open(self.source)])
+        query_text = re.sub(r'\s+', ' ', query_text)
+        return query_text.strip()
 
     def export(self, destination=None):
         """
-        Exports the query after interpolation to a file with a time prefixed version of the original file name with a
+        Exports the query to a file with a time prefixed version of the original file name with a
         mini report of the execution appended at the end of the file. And exports the result in a csv file with the same
         name except for the extension.
 
@@ -100,22 +70,6 @@ class Query:
             print(row)
 
 
-def normalize_space(line):
-    return re.sub(' +', ' ', line)
-
-
-def strip_inline_comment(line):
-    return re.sub('(--|#).*', '', line)
-
-
-def is_blank(line):
-    return not line.strip()
-
-
-def is_comment(line):
-    return line.strip().startswith('--') or line.strip().startswith('#')
-
-
 class Result:
     """
     Hold the results of the execution of a MySQL query
@@ -133,13 +87,13 @@ class Result:
         :type query_str: str
         """
         cursor = CursorProvider.get()
-        r_log.debug('Executing {}'.format(query_str))
+        r_log.info('Executing %s', query_str)
         self.execution_start = datetime.now()
         cursor.execute(query_str)
         self.execution_end = datetime.now()
         self.execution_time = self.execution_end - self.execution_start
         self.rows = cursor.fetchall()
-        r_log.debug('Got {} row(s)'.format(len(self.rows)))
+        r_log.debug('Got %d row(s)', len(self.rows))
         self.description = tuple(column[0] for column in cursor.description)
 
     def __repr__(self):

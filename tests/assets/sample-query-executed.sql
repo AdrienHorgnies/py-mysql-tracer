@@ -15,4 +15,4 @@ WHERE title NOT IN ('developer');
 -- END TIME: 1992-03-04T11:00:05.987654
 -- DURATION: 0:00:00.333333
 -- ROWS COUNT: 2
--- RESULT FILE: 1992-03-04T11-00-05_sample-query-with-easy-template.csv
+-- RESULT FILE: 1992-03-04T11-00-05_sample-query.csv

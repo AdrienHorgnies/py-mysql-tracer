@@ -1,8 +1,3 @@
-"""
-CLI script to run MySQL SELECT statements
-
-It produces a copy of provided file with additional metadata and an export of results in CSV format
-"""
 import logging
 
 from mysql_tracer import _configuration
@@ -46,8 +41,7 @@ def main():
     CursorProvider.init(main_args.host, main_args.user, main_args.port, main_args.database, main_args.ask_password,
                         main_args.store_password)
 
-    template_vars = main_args.template_vars if main_args.template_vars else []
-    queries = [Query(path, dict(template_vars)) for path in main_args.query]
+    queries = [Query(path) for path in main_args.query]
 
     for query in queries:
         if main_args.display:

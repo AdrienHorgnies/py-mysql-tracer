@@ -11,8 +11,7 @@ from mysql_tracer import _writer
 @pytest.fixture
 def query(asset, asset_copy):
     query_mock = mock.MagicMock()
-    query_mock.source = asset_copy('sample-query-with-easy-template.sql')
-    query_mock.interpolated = open(asset('sample-query.sql')).read()
+    query_mock.source = asset_copy('sample-query.sql')
     query_mock.result = mock.MagicMock()
     query_mock.result.execution_start = datetime(1992, 3, 4, 11, 0, 5, 654321)
     query_mock.result.execution_end = datetime(1992, 3, 4, 11, 0, 5, 987654)
@@ -28,8 +27,8 @@ def query(asset, asset_copy):
 def test_write(asset, query):
     report, export = _writer.write(query)
 
-    assert basename(report) == '1992-03-04T11-00-05_sample-query-with-easy-template.sql'
-    assert basename(export) == '1992-03-04T11-00-05_sample-query-with-easy-template.csv'
+    assert basename(report) == '1992-03-04T11-00-05_sample-query.sql'
+    assert basename(export) == '1992-03-04T11-00-05_sample-query.csv'
     assert isfile(report)
     assert isfile(export)
     assert [line for line in open(report)] == [line for line in open(asset('sample-query-executed.sql'))]
@@ -39,8 +38,8 @@ def test_write(asset, query):
 def test_write_with_destination(asset, query, tmpdir):
     report, export = _writer.write(query, tmpdir)
 
-    assert report == join(tmpdir, '1992-03-04T11-00-05_sample-query-with-easy-template.sql')
-    assert export == join(tmpdir, '1992-03-04T11-00-05_sample-query-with-easy-template.csv')
+    assert report == join(tmpdir, '1992-03-04T11-00-05_sample-query.sql')
+    assert export == join(tmpdir, '1992-03-04T11-00-05_sample-query.csv')
     assert isfile(report)
     assert isfile(export)
     assert [line for line in open(report)] == [line for line in open(asset('sample-query-executed.sql'))]

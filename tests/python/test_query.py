@@ -30,16 +30,6 @@ def test_executable_str(mock_cp, cursor):
 
 
 @mock.patch('mysql_tracer._query.CursorProvider')
-def test_template_executable_str(mock_cp, cursor):
-    mock_cp.get.return_value = cursor
-    actual = _query.Query('tests/assets/sample-template-query.sql',
-                          template_vars=dict(job='developer', disappear='', donotexist=''))
-
-    assert actual.executable_str == "SELECT '{', '$jobs}', name, title FROM person LEFT JOIN job " \
-                                    "ON person.job_id = job.id WHERE title IN ('developer') ;"
-
-
-@mock.patch('mysql_tracer._query.CursorProvider')
 @mock.patch('mysql_tracer._query.datetime')
 def test_result(mock_datetime, mock_cp, cursor, asset):
     mock_cp.get.return_value = cursor

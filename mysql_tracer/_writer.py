@@ -23,7 +23,7 @@ def write(query, destination=None):
     log.debug('Writing report for single query {} to {}'.format(query.name, realpath(directory)))
 
     with open(report_path, 'w') as report_file:
-        report_file.write(query.interpolated)
+        report_file.writelines(open(query.source))
         report_file.write(REPORT_TEMPLATE.format(
             start=query.result.execution_start.isoformat(),
             end=query.result.execution_end.isoformat(),
