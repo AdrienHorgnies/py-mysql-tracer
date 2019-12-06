@@ -38,7 +38,7 @@ You can build a package with setuptools.
     python setup.py sdist bdist_wheel
 
 All dependencies have their version frozen.
-To install new versions of the dependencies, uninstall them, install the billing-check package and then freeze them again
+To install new versions of the dependencies, uninstall them, install the mysql-tracer package and then freeze them again
 
     pip freeze | xargs pip uninstall -y
     python setup.py sdist
