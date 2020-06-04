@@ -13,7 +13,7 @@ setuptools.setup(
     url='https://github.com/AdrienHorgnies/py-mysql-tracer',
     download_url='https://github.com/AdrienHorgnies/py-mysql-tracer/archive/{version}.tar.gz'.format(version=version),
     packages=setuptools.find_packages(),
-    install_requires=['mysql-connector-python==8.0.17', 'keyring==19.0.2'],
+    install_requires=['mysql-connector-python==8.0.20', 'keyring==19.0.2'],
     extras_require={
         'dev': ['pytest==5.0.1', 'mock==3.0.5']
     },
